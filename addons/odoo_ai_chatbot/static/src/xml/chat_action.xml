@@ -1,0 +1,24 @@
+<!-- XML QWeb templates for chatbot actions -->
+<t t-name="odoo_ai_chatbot.ChatClient" owl="1">
+  <div class="o_ai_chatbot">
+    <div class="o_ai_header">
+      <div class="o_ai_title">AI Chat (RAG)</div>
+      <button class="btn btn-secondary btn-sm" t-on-click="newSession">Nueva sesión</button>
+    </div>
+
+    <div class="o_ai_body" t-ref="body">
+      <t t-foreach="state.messages" t-as="m" t-key="m.id">
+        <div t-attf-class="o_ai_msg #{m.role}">
+          <div class="o_ai_bubble">
+            <t t-esc="m.content"/>
+          </div>
+        </div>
+      </t>
+    </div>
+
+    <div class="o_ai_footer">
+      <textarea class="form-control" t-model="state.input" placeholder="Escribe tu pregunta…"/>
+      <button class="btn btn-primary" t-on-click="send">Enviar</button>
+    </div>
+  </div>
+</t>

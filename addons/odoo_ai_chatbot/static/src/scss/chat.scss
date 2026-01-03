@@ -1,0 +1,46 @@
+/* Styles for chatbot */
+.o_ai_chatbot {
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+
+  .o_ai_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+
+    .o_ai_title { font-weight: 600; font-size: 16px; }
+  }
+
+  .o_ai_body { flex: 1; overflow: auto; padding: 12px 0; }
+
+  .o_ai_msg {
+    display: flex;
+    margin-bottom: 10px;
+    &.user { justify-content: flex-end; }
+    &.assistant { justify-content: flex-start; }
+
+    .o_ai_bubble {
+      max-width: 72%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      white-space: pre-wrap;
+      border: 1px solid rgba(0,0,0,.06);
+      background: #fff;
+    }
+    &.user .o_ai_bubble { background: rgba(98, 70, 234, .08); }
+  }
+
+  .o_ai_footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,.08);
+
+    textarea { min-height: 44px; resize: none; }
+  }
+}

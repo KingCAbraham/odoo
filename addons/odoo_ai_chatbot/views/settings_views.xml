@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="res_config_settings_view_form_ai_chatbot" model="ir.ui.view">
+    <field name="name">res.config.settings.ai.chatbot</field>
+    <field name="model">res.config.settings</field>
+
+    <!-- Recomendado en Odoo 17/18 -->
+    <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+
+    <field name="arch" type="xml">
+      <xpath expr="//form" position="inside">
+
+        <app string="AI Chatbot" name="odoo_ai_chatbot">
+          <block title="AI Chatbot (RAG)" id="ai_chatbot_block">
+
+            <setting id="ai_chatbot_provider" string="Proveedor">
+              <field name="provider"/>
+            </setting>
+
+            <setting id="ai_chatbot_api_key" string="OpenAI API Key"
+                     help="Guárdala aquí para que el módulo pueda llamar al LLM.">
+              <field name="openai_api_key" password="True" attrs="{'invisible':[('provider','!=','openai')]}"/>
+            </setting>
+
+            <setting id="ai_chatbot_chat_model" string="Modelo de chat">
+              <field name="openai_chat_model" attrs="{'invisible':[('provider','!=','openai')]}"/>
+            </setting>
+
+            <setting id="ai_chatbot_embed_model" string="Modelo de embeddings">
+              <field name="openai_embed_model" attrs="{'invisible':[('provider','!=','openai')]}"/>
+            </setting>
+
+            <separator/>
+
+            <setting id="ai_chatbot_groq_api_key" string="Groq API Key"
+                     help="Guárdala aquí para usar Groq como proveedor.">
+              <field name="groq_api_key" password="True" attrs="{'invisible':[('provider','!=','groq')]}"/>
+            </setting>
+
+            <setting id="ai_chatbot_groq_chat_model" string="Modelo de chat (Groq)">
+              <field name="groq_chat_model" attrs="{'invisible':[('provider','!=','groq')]}"/>
+            </setting>
+
+            <setting id="ai_chatbot_groq_embed_model" string="Modelo de embeddings (Groq)">
+              <field name="groq_embed_model" attrs="{'invisible':[('provider','!=','groq')]}"/>
+            </setting>
+
+            <setting id="ai_chatbot_top_k" string="Top K (RAG)">
+              <field name="rag_top_k"/>
+            </setting>
+
+          </block>
+        </app>
+
+      </xpath>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,194 @@
+<odoo>
+    <data>
+
+        <!-- LISTA (TREE / LIST) -->
+        <record id="view_school_student_list" model="ir.ui.view">
+            <field name="name">school.student.list</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <list string="Estudiantes">
+                    <field name="active"/>
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="level"/>
+                    <field name="enrollment_date"/>
+                    <field name="average_score"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- FORMULARIO -->
+                <!-- FORMULARIO -->
+        <record id="view_school_student_form" model="ir.ui.view">
+            <field name="name">school.student.form</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <form string="Estudiante">
+                    <sheet>
+                        <!-- Primera fila: foto + datos principales -->
+                        <group>
+                            <!-- Columna izquierda: foto -->
+                            <group>
+                                <field name="image_1920"
+                                       widget="image"
+                                       class="oe_avatar"
+                                       options="{'preview_image': 'image_1920'}"/>
+                            </group>
+
+                            <!-- Columna derecha: datos básicos -->
+                            <group>
+                                <field name="name"/>
+                                <field name="age"/>
+                                <field name="level"/>
+                                <field name="enrollment_date"/>
+                            </group>
+                        </group>
+
+                        <!-- Segunda fila: info adicional -->
+                        <group>
+                            <group>
+                                <field name="average_score"/>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Notas">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- KANBAN -->
+        <record id="view_school_student_kanban" model="ir.ui.view">
+            <field name="name">school.student.kanban</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column" default_group_by="level">
+                    <!-- campos disponibles en el kanban -->
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="level"/>
+                    <field name="enrollment_date"/>
+                    <field name="average_score"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="active"/>
+                    <field name="image_1920"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-att-class="'oe_kanban_global_click o_kanban_record' + (record.active.value ? '' : ' o_kanban_record_inactive')">
+                                <!-- Avatar -->
+                                <div class="o_kanban_image">
+                                    <field name="image_1920" widget="image" class="o_kanban_avatar"/>
+                                </div>
+
+                                <!-- Detalles -->
+                                <div class="o_kanban_details">
+                                    <!-- Nombre -->
+                                    <strong class="o_kanban_record_title">
+                                        <span>
+                                            <field name="name"/>
+                                        </span>
+                                    </strong>
+
+                                    <!-- Nivel -->
+                                    <t t-if="record.level.value">
+                                        <div>
+                                            <span class="badge badge-secondary">
+                                                <span>
+                                                    <field name="level"/>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Edad -->
+                                    <t t-if="record.age.value">
+                                        <div>
+                                            Edad:
+                                            <span>
+                                                <field name="age"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Fecha inscripción -->
+                                    <t t-if="record.enrollment_date.value">
+                                        <div>
+                                            <span class="fa fa-calendar"/>
+                                            <span>
+                                                <field name="enrollment_date"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Promedio -->
+                                    <t t-if="record.average_score.value">
+                                        <div>
+                                            Promedio:
+                                            <span>
+                                                <field name="average_score"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Email -->
+                                    <t t-if="record.email.value">
+                                        <div>
+                                            <span class="fa fa-envelope"/>
+                                            <span>
+                                                <field name="email"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Teléfono -->
+                                    <t t-if="record.phone.value">
+                                        <div>
+                                            <span class="fa fa-phone"/>
+                                            <span>
+                                                <field name="phone"/>
+                                            </span>
+                                        </div>
+                                    </t>
+
+                                    <!-- Archivado -->
+                                    <t t-if="!record.active.value">
+                                        <div class="text-muted mt-2">
+                                            Archivado
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ACCIÓN -->
+        <record id="action_school_student" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="res_model">school.student</field>
+            <!-- Kanban primero para que abra en tarjetas por defecto -->
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <!-- MENÚ -->
+        <menuitem id="menu_school_root" name="School"/>
+        <menuitem id="menu_school_student"
+                  name="Students"
+                  parent="menu_school_root"
+                  action="action_school_student"/>
+
+    </data>
+</odoo>
