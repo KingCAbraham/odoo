@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <template id="assets_backend" inherit_id="web.assets_backend" name="AI Chatbot Modern Assets">
-    <xpath expr="." position="inside">
-      <script type="module" src="/ai_chatbot_modern/static/src/js/chat_action.js"/>
-    </xpath>
-  </template>
+    <!-- Odoo 16+ / 17+ / 18+: web.assets_backend ya NO existe -->
+    <template id="assets_backend" inherit_id="web._assets_backend" name="AI Chatbot Modern Assets">
+        <xpath expr="." position="inside">
+            <script type="module" src="/ai_chatbot_modern/static/src/js/chat_action.js"/>
+        </xpath>
+    </template>
 </odoo>

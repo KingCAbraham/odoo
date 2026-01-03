@@ -7,10 +7,6 @@
     "data": [
         "security/ir.model.access.csv",
 
-        # Assets y QWeb (carga garantizada)
-        "views/assets.xml",
-        "views/chat_templates.xml",
-
         # Vistas/menús
         "views/documents_views.xml",
         "views/chat_menu.xml",
