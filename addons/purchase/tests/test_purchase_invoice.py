@@ -765,10 +765,10 @@ class TestPurchaseToInvoice(TestPurchaseToInvoiceCommon):
         inv = po.invoice_ids
 
         # Check the invoice line names
-        self.assertEqual(inv.invoice_line_ids[0].name, f"{pol_prod_no_redundancy.product_id.display_name} {pol_prod_no_redundancy.name}", "When the description doesn't contain the product name, it should be added to the invoice line name")
+        self.assertEqual(inv.invoice_line_ids[0].name, f"{pol_prod_no_redundancy.product_id.display_name}\n{pol_prod_no_redundancy.name}", "When the description doesn't contain the product name, it should be added to the invoice line name")
         self.assertEqual(inv.invoice_line_ids[1].name, f"{pol_prod_same.name}", "When the description is the product name, the invoice line name should only be the description")
         self.assertEqual(inv.invoice_line_ids[2].name, f"{pol_prod_product_in_name.name}", "When description contains the product name, the invoice line name should only be the description")
-        self.assertEqual(inv.invoice_line_ids[3].name, f"{pol_prod_name_in_product.product_id.display_name} {pol_prod_name_in_product.name}", "When the product name contains the description, the invoice line name should be the product name and the description")
+        self.assertEqual(inv.invoice_line_ids[3].name, f"{pol_prod_name_in_product.product_id.display_name}\n{pol_prod_name_in_product.name}", "When the product name contains the description, the invoice line name should be the product name and the description")
 
 
 @tagged('post_install', '-at_install')
@@ -827,6 +827,35 @@ class TestInvoicePurchaseMatch(TestPurchaseToInvoiceCommon):
         """
         po = self.init_purchase(confirm=True, products=[self.product_order])
         invoice = self.init_invoice('in_invoice', partner=self.partner_a, products=[self.product_order, self.service_order])
+
+        invoice._find_and_set_purchase_orders(
+            ['my_match_reference'], invoice.partner_id.id, invoice.amount_total, from_ocr=False)
+
+        self.assertTrue(invoice.id in po.invoice_ids.ids)
+        invoice_lines = invoice.line_ids.filtered(lambda l: l.price_unit)
+        self.assertEqual(len(invoice_lines), 2)
+        for line in po.order_line:
+            self.assertTrue(line in invoice_lines.purchase_line_id)
+
+    def test_subset_match_from_edi_partial_po_within_precision(self):
+        """A line of the invoice totally matches a 1-line purchase order despite
+        a slight unit price difference due to decimal precision issues
+        """
+        po = self.init_purchase(confirm=True, products=[self.product_order])
+        invoice = self.init_invoice('in_invoice', partner=self.partner_a, products=[self.product_order, self.service_order])
+
+        # Simulate a slight difference in unit_price due to decimal precision issues
+        # for example when when receiving an invoice in XML or OCR
+        po_line = po.order_line[0]
+        invoice_line = invoice.line_ids[0]
+        precision_error = 0.0000001
+        query_string = f"""
+            UPDATE account_move_line
+            SET price_unit = {po_line.price_unit + precision_error}
+            WHERE id = {invoice_line.id}
+        """
+        invoice_line.env.cr.execute(query_string)
+        invoice_line.invalidate_model(['price_unit'], flush=False)
 
         invoice._find_and_set_purchase_orders(
             ['my_match_reference'], invoice.partner_id.id, invoice.amount_total, from_ocr=False)

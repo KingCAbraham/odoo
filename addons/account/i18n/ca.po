@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* account
+# * account
 #
 # Translators:
 # César López Ramírez <cesar.lopez@coopdevs.org>, 2024
@@ -44,20 +44,23 @@
 # Wil Odoo, 2025
 # Santiago Payà <santiagopim@gmail.com>, 2025
 # Noemi Pla, 2025
-#
+# "Noemi Pla Garcia (nopl)" <nopl@odoo.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:37+0000\n"
-"PO-Revision-Date: 2024-09-25 09:41+0000\n"
-"Last-Translator: Noemi Pla, 2025\n"
-"Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
+"POT-Creation-Date: 2025-12-12 18:36+0000\n"
+"PO-Revision-Date: 2025-12-06 17:08+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"Language-Team: Catalan <https://translate.odoo.com/projects/odoo-18/account/"
+"ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__type
@@ -240,18 +243,6 @@ msgstr "%(ref)s (%(currency_amount)s)"
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr "%(tag)s (%(country_code)s)"
-
-#. module: account
-#. odoo-python
-#: code:addons/account/models/account_tax.py:0
-msgid ""
-"%(tax_account)s (%(account_name)s) should be an account of type \"%"
-"(receivable)s\" or \"%(payable)s\" with both options \"%"
-"(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
-msgstr ""
-"%(tax_account)s (%(account_name)s) ha de ser un compte del tipus \"%"
-"(receivable)s\" o \"%(payable)s\" amb les opcions \"%"
-"(allow_reconciliation)s\" i \"%(non_trade)s\" totes dues activades."
 
 #. module: account
 #. odoo-python
@@ -1972,6 +1963,14 @@ msgid "Account Chart Template"
 msgstr "Plantilla de quadre de comptes"
 
 #. module: account
+#. odoo-python
+#: code:addons/account/models/account_code_mapping.py:0
+msgid ""
+"Account Code Mapping cannot be accessed directly. It is designed to be used "
+"only through the Chart of Accounts."
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_report_line__account_codes_formula
 msgid "Account Codes Formula Shortcut"
 msgstr "Drecera de fórmula dels codis de comptes"
@@ -3420,6 +3419,11 @@ msgstr "Nombre d'adjunts"
 #: model:ir.model.fields,field_description:account.field_account_payment__attachment_ids
 msgid "Attachments"
 msgstr "Adjunts"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__attachments_not_supported
+msgid "Attachments Not Supported"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_mail_mail__account_audit_log_activated
@@ -6600,6 +6604,11 @@ msgid "Display Amount"
 msgstr "Import de visualització"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__display_attachments_widget
+msgid "Display Attachments Widget"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_term_line__display_days_next_month
 msgid "Display Days Next Month"
 msgstr "Mostra els dies del mes següent"
@@ -7778,7 +7787,7 @@ msgstr "Plegable"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.portal_my_home_invoice
 msgid "Follow, download or pay our invoices"
-msgstr "Segueixi, descarregui o pagui les nostres factures"
+msgstr "Segueix, descarrega o paga les nostres factures"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.portal_my_home_invoice
@@ -8189,6 +8198,8 @@ msgid ""
 "Groupby feature isn't supported by '%(engine)s' engine. Please remove the "
 "groupby value on '%(report_line)s'"
 msgstr ""
+"La funció d'agrupació no és compatible amb el motor %(engine)s. Elimina el "
+"valor d'agrupació a %(report_line)s"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_merge_wizard_line__grouping_key
@@ -8353,6 +8364,11 @@ msgstr "Divisió lateral horitzontal"
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
 msgid "How total tax amount is computed in orders and invoices"
 msgstr "Com es calcula l'import total de l'impost en comandes i factures"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "ICE:"
+msgstr "ICE:"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__id
@@ -9227,11 +9243,6 @@ msgstr "Pagament de factures en línia"
 #: model:ir.model.fields,field_description:account.field_account_move__invoice_outstanding_credits_debits_widget
 msgid "Invoice Outstanding Credits Debits Widget"
 msgstr "Giny de dèbits de Crèdits Pendents de factura"
-
-#. module: account
-#: model:ir.actions.report,name:account.account_invoices
-msgid "Invoice PDF"
-msgstr "Factura en PDF"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__invoice_partner_display_name
@@ -11945,6 +11956,7 @@ msgstr "PAY001"
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
+#: model:ir.actions.report,name:account.account_invoices
 msgid "PDF"
 msgstr "PDF"
 
@@ -13302,7 +13314,7 @@ msgstr "Abonament"
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
 msgid "Refund Created"
-msgstr "Creat el refusat"
+msgstr "Reembossament creat"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_in_invoice_refund_tree
@@ -15809,7 +15821,7 @@ msgstr "El país que fan servir els informes d'impostos d'aquesta empresa."
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
 msgid "The currency rate must be strictly positive."
-msgstr ""
+msgstr "El ràtio de les monedes deu que ser estrictament positiu"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__currency_id
@@ -16106,8 +16118,8 @@ msgid ""
 "The journal entry from which this tax cash basis journal entry has been "
 "created."
 msgstr ""
-"L'assentament de la qual s' ha creat aquesta entrada en efectiu en base de "
-"diari."
+"L'assentament a partir del qual s'ha creat aquesta entrada d'impost amb "
+"criteri de caixa en el diari."
 
 #. module: account
 #. odoo-python
@@ -17104,8 +17116,8 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "This setting cannot be changed after an invoice is created."
-msgstr "No es pot modificar aquesta configuració després de crear una factura."
+msgid "This setting locks once a journal entry is created."
+msgstr ""
 
 #. module: account
 #. odoo-python
@@ -19837,6 +19849,22 @@ msgid ""
 msgstr ""
 "{{ object.company_id.name }} Rebut de pagament (Ref {{ object.name or 'n/"
 "a' }})"
+
+#~ msgid "Invoice PDF"
+#~ msgstr "Factura en PDF"
+
+#~ msgid "This setting cannot be changed after an invoice is created."
+#~ msgstr ""
+#~ "No es pot modificar aquesta configuració després de crear una factura."
+
+#~ msgid ""
+#~ "%(tax_account)s (%(account_name)s) should be an account of type \"%"
+#~ "(receivable)s\" or \"%(payable)s\" with both options \"%"
+#~ "(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
+#~ msgstr ""
+#~ "%(tax_account)s (%(account_name)s) ha de ser un compte del tipus \"%"
+#~ "(receivable)s\" o \"%(payable)s\" amb les opcions \"%"
+#~ "(allow_reconciliation)s\" i \"%(non_trade)s\" totes dues activades."
 
 #~ msgid ""
 #~ "Accrual entry created on %(date)s: %(accrual_entry)s.                    "

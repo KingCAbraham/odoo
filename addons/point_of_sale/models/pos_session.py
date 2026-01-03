@@ -1153,7 +1153,7 @@ class PosSession(models.Model):
 
         account_payment = self.env['account.payment'].create({
             'amount': abs(amounts['amount']),
-            'partner_id': payment.partner_id.id,
+            'partner_id': accounting_partner.id,
             'journal_id': payment_method.journal_id.id,
             'force_outstanding_account_id': outstanding_account.id,
             'destination_account_id': destination_account.id,
@@ -1852,7 +1852,7 @@ class PosSession(models.Model):
             ('sale_ok', '=', True),
             ('available_in_pos', '=', True),
         ])
-        if product:
+        if product and product[0].barcode == barcode:
             return {'product.product': product.with_context(product_context).read(product_fields, load=False)}
 
         domain = [('barcode', 'not in', ['', False])]

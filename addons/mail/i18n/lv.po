@@ -15,13 +15,14 @@
 # JanisJanis <jbojars@gmail.com>, 2025
 # ievaputnina <ievai.putninai@gmail.com>, 2025
 # Aleksejs Ivanovs <ai@myacc.pro>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-03 18:38+0000\n"
-"PO-Revision-Date: 2025-09-17 13:05+0000\n"
-"Last-Translator: Aleksejs Ivanovs <ai@myacc.pro>\n"
+"POT-Creation-Date: 2025-12-05 18:36+0000\n"
+"PO-Revision-Date: 2025-11-25 09:50+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Latvian <https://translate.odoo.com/projects/odoo-18/mail/lv/"
 ">\n"
 "Language: lv\n"
@@ -8685,6 +8686,12 @@ msgid "Select the content filter used for filtering GIFs"
 msgstr "Izvēlieties satura filtru, ko izmantot GIF attēlu filtrēšanai"
 
 #. module: mail
+#. odoo-python
+#: code:addons/mail/wizard/mail_activity_schedule.py:0
+msgid "Selected user '%(user)s' cannot upload documents on model '%(model)s'"
+msgstr ""
+
+#. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/chatter/web/mail_composer_send_dropdown.xml:0
 #: code:addons/mail/static/src/core/common/composer.js:0
@@ -10286,6 +10293,12 @@ msgid "Unmute Conversation"
 msgstr ""
 
 #. module: mail
+#. odoo-python
+#: code:addons/mail/models/mail_tracking_value.py:0
+msgid "Unnamed %(record_model_name)s (%(record_id)s)"
+msgstr ""
+
+#. module: mail
 #. odoo-javascript
 #: code:addons/mail/static/src/core/common/message_card_list.xml:0
 #: code:addons/mail/static/src/discuss/message_pin/common/message_actions.js:0
@@ -11479,7 +11492,7 @@ msgstr "piem. Ieplānot tikšanos"
 #: model_terms:ir.ui.view,arch_db:mail.mail_alias_view_form
 #: model_terms:ir.ui.view,arch_db:mail.res_config_settings_view_form
 msgid "e.g. mycompany.com"
-msgstr ""
+msgstr "piemēram, mycompany.com"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.discuss_channel_view_form

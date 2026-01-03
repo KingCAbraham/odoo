@@ -757,6 +757,9 @@ class TestUi(odoo.tests.HttpCase):
     def test_website_seo_notification(self):
         self.start_tour(self.env['website'].get_client_action_url("/"), "website_seo_notification", login="admin")
 
+    def test_media_iframe_video_options(self):
+        self.start_tour("/", "website_media_iframe_video_options", login="admin")
+
     def test_popup_visibility_option(self):
         self.start_tour("/", "website_popup_visibility_option", login="admin")
 
@@ -772,3 +775,6 @@ class TestUi(odoo.tests.HttpCase):
     @mute_logger("odoo.http")
     def test_website_replace_remove_image(self):
         self.start_tour("/", "website_replace_remove_image", login="admin")
+
+    def test_website_custom_colors_picking(self):
+        self.start_tour('/', 'website_custom_colors_picking', login='admin')

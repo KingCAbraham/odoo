@@ -39,13 +39,14 @@
 # or balmas, 2025
 # Yoram Lavi, 2025
 # or balmas <or@laylinetech.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:37+0000\n"
-"PO-Revision-Date: 2025-09-14 22:20+0000\n"
-"Last-Translator: or balmas <or@laylinetech.com>\n"
+"POT-Creation-Date: 2025-12-12 18:36+0000\n"
+"PO-Revision-Date: 2025-12-26 14:00+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Hebrew <https://translate.odoo.com/projects/odoo-18/account/"
 "he/>\n"
 "Language: he\n"
@@ -53,7 +54,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n == 2) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__type
@@ -170,6 +171,8 @@ msgid ""
 "%(attachment_name)s (detached by %(user)s on %(date)s)%"
 "(attachment_extension)s"
 msgstr ""
+"%(attachment_name)s (נותק ע\"י  %(user)s בתאריך %(date)s)%"
+"(attachment_extension)s"
 
 #. module: account
 #. odoo-python
@@ -185,6 +188,9 @@ msgid ""
 "To be consistent, the journal entry must always have exactly one suspense "
 "line."
 msgstr ""
+"%(move)s נמצאת במצב שגוי ביחס לשורת הפקודה המשויכת אליה..\n"
+"כדי לשמור על תקינות חשבונאית, על פקודת היומן להכיל שורת חשבון ביניים אחת "
+"בלבד."
 
 #. module: account
 #. odoo-python
@@ -229,18 +235,6 @@ msgstr "%(ref)s(%(currency_amount)s)"
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr "%(tag)s (%(country_code)s)"
-
-#. module: account
-#. odoo-python
-#: code:addons/account/models/account_tax.py:0
-msgid ""
-"%(tax_account)s (%(account_name)s) should be an account of type \"%"
-"(receivable)s\" or \"%(payable)s\" with both options \"%"
-"(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
-msgstr ""
-"%(tax_account)s(%(account_name)s) צריך להיות מסוג חשבון\"%(receivable)s\" או "
-"\"%(payable)s\" עם שתי האופציות \"%(allow_reconciliation)s\" \"%"
-"(non_trade)s\" מופעלות."
 
 #. module: account
 #. odoo-python
@@ -893,6 +887,10 @@ msgid ""
 "invoices, and with which electronic format.\n"
 "                    </small>"
 msgstr ""
+"<small class=\"form-text text-muted\">\n"
+"                        ניתן לבחור איך תרצו שישלחו החשבוניות שלכם, ובאיזה "
+"פורמט.\n"
+"                    </small>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.portal_my_invoices
@@ -1793,6 +1791,14 @@ msgstr "חשבון עיגול מזומן"
 #: model:ir.model,name:account.model_account_chart_template
 msgid "Account Chart Template"
 msgstr "תבנית לוח חשבונות"
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/account_code_mapping.py:0
+msgid ""
+"Account Code Mapping cannot be accessed directly. It is designed to be used "
+"only through the Chart of Accounts."
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_report_line__account_codes_formula
@@ -3204,6 +3210,11 @@ msgstr "כמות קבצים מצורפים"
 #: model:ir.model.fields,field_description:account.field_account_payment__attachment_ids
 msgid "Attachments"
 msgstr "קבצים מצורפים"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__attachments_not_supported
+msgid "Attachments Not Supported"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_mail_mail__account_audit_log_activated
@@ -6324,6 +6335,11 @@ msgid "Display Amount"
 msgstr "הצג כמות"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__display_attachments_widget
+msgid "Display Attachments Widget"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_term_line__display_days_next_month
 msgid "Display Days Next Month"
 msgstr "תצוגת ימים בחודש הבא"
@@ -8043,6 +8059,11 @@ msgid "How total tax amount is computed in orders and invoices"
 msgstr "כיצד מחושב סכום המס הכולל בהזמנות ובחשבוניות"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "ICE:"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__id
 #: model:ir.model.fields,field_description:account.field_account_account_tag__id
 #: model:ir.model.fields,field_description:account.field_account_accrued_orders_wizard__id
@@ -8878,11 +8899,6 @@ msgstr "תשלום מקוון של חשבוניות"
 #: model:ir.model.fields,field_description:account.field_account_move__invoice_outstanding_credits_debits_widget
 msgid "Invoice Outstanding Credits Debits Widget"
 msgstr "יישומון חיובים של חשבוניות זיכויים"
-
-#. module: account
-#: model:ir.actions.report,name:account.account_invoices
-msgid "Invoice PDF"
-msgstr "חשבונית PDF"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__invoice_partner_display_name
@@ -11525,6 +11541,7 @@ msgstr ""
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
+#: model:ir.actions.report,name:account.account_invoices
 msgid "PDF"
 msgstr "PDF"
 
@@ -15256,7 +15273,7 @@ msgstr "המדינה המוגדרת לצורך להפקת דוחות מסים ע
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
 msgid "The currency rate must be strictly positive."
-msgstr ""
+msgstr "שער המטבע חייב להיות חיובי לחלוטין."
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__currency_id
@@ -16428,8 +16445,8 @@ msgstr "הפרסום האוטומטי החוזר הזה יפורסם עד וכו
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "This setting cannot be changed after an invoice is created."
-msgstr "הגדרה זו אינה ניתנת לשינוי לאחר שחשבונית נוצרה."
+msgid "This setting locks once a journal entry is created."
+msgstr ""
 
 #. module: account
 #. odoo-python
@@ -18945,7 +18962,7 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.autopost_bills_wizard
 msgid "without making any corrections."
-msgstr ""
+msgstr "ללא ביצוע תיקונים."
 
 #. module: account
 #. odoo-python
@@ -18979,6 +18996,21 @@ msgid ""
 "{{ object.company_id.name }} Payment Receipt (Ref {{ object.name or 'n/a' }})"
 msgstr ""
 "{{ object.company_id.name }} קבלה על תשלום (Ref {{ object.name or 'n/a' }})"
+
+#~ msgid "Invoice PDF"
+#~ msgstr "חשבונית PDF"
+
+#~ msgid "This setting cannot be changed after an invoice is created."
+#~ msgstr "הגדרה זו אינה ניתנת לשינוי לאחר שחשבונית נוצרה."
+
+#~ msgid ""
+#~ "%(tax_account)s (%(account_name)s) should be an account of type \"%"
+#~ "(receivable)s\" or \"%(payable)s\" with both options \"%"
+#~ "(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
+#~ msgstr ""
+#~ "%(tax_account)s(%(account_name)s) צריך להיות מסוג חשבון\"%(receivable)s\" "
+#~ "או \"%(payable)s\" עם שתי האופציות \"%(allow_reconciliation)s\" \"%"
+#~ "(non_trade)s\" מופעלות."
 
 #~ msgid ""
 #~ "Accrual entry created on %(date)s: %(accrual_entry)s.                    "

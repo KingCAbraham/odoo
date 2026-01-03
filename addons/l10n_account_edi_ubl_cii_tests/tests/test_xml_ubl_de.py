@@ -80,6 +80,7 @@ class TestUBLDE(TestUBLCommon):
     ####################################################
 
     def test_export_import_invoice(self):
+        self.env['ir.config_parameter'].sudo().set_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True)
         invoice = self._generate_move(
             self.partner_1,
             self.partner_2,
@@ -136,10 +137,6 @@ class TestUBLDE(TestUBLCommon):
         )
         self.assertEqual(attachment.name[-10:], "ubl_de.xml")
         self._assert_imported_invoice_from_etree(invoice, attachment)
-
-    def test_export_import_invoice_new(self):
-        self.env['ir.config_parameter'].sudo().set_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True)
-        self.test_export_import_invoice()
 
     def test_export_import_invoice_without_vat_and_peppol_endpoint(self):
         self.partner_2.write({
@@ -310,3 +307,32 @@ class TestUBLDE(TestUBLCommon):
         self._detach_attachment(attachment)
         created_bill.message_post(attachment_ids=[attachment.id])
         self.assertTrue(created_bill)
+
+    def test_leitweg_id(self):
+        partner = self.partner_2
+        partner.write({
+            'peppol_eas': '0204',
+            'peppol_endpoint': '123456789',
+        })
+
+        acc_bank = self.env['res.partner.bank'].create({
+            'acc_number': 'DE15001559627232',
+            'partner_id': partner.id,
+        })
+
+        invoice = self._generate_move(
+            self.partner_1,
+            partner,
+            move_type='out_invoice',
+            partner_id=partner.id,
+            partner_bank_id=acc_bank.id,
+            invoice_date='2025-12-01',
+            invoice_line_ids=[{'product_id': self.product_a.id}],
+        )
+        attachment = invoice.ubl_cii_xml_id
+
+        self.assertTrue(attachment)
+
+        xml_content = base64.b64decode(attachment.with_context(bin_size=False).datas)
+        xml_etree = self.get_xml_tree_from_string(xml_content)
+        self.assertEqual(xml_etree.find('{*}BuyerReference').text, '123456789')

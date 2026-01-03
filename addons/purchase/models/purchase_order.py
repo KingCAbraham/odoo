@@ -12,7 +12,7 @@ from odoo import api, Command, fields, models, _
 from odoo.osv import expression
 from odoo.tools import format_amount, format_date, format_list, formatLang, groupby
 from odoo.tools.float_utils import float_is_zero
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessDenied, UserError, ValidationError
 
 
 class PurchaseOrder(models.Model):
@@ -417,16 +417,17 @@ class PurchaseOrder(models.Model):
             pass
         else:
             access_opt = customer_portal_group[2].setdefault('button_access', {})
+            base_url = self.get_base_url()
             if self.env.context.get('is_reminder'):
                 access_opt['title'] = _('View')
                 actions = customer_portal_group[2].setdefault('actions', list())
                 actions.extend([
-                    {'url': self.get_confirm_url(confirm_type='reminder'), 'title': _('Accept')},
-                    {'url': self.get_update_url(), 'title': _('Update Dates')},
+                    {'url': base_url + self.get_confirm_url(confirm_type='reminder'), 'title': _('Accept')},
+                    {'url': base_url + self.get_update_url(), 'title': _('Update Dates')},
                 ])
             else:
-                access_opt['title'] = _('View Quotation') if self.state in ('draft', 'sent') else _('View Order')
-                access_opt['url'] = self.get_confirm_url()
+                title = _('View Quotation') if self.state in ('draft', 'sent') else _('View Order')
+                access_opt.update(title=title, url=base_url + self.get_confirm_url())
 
         return groups
 
@@ -612,7 +613,7 @@ class PurchaseOrder(models.Model):
             'name': _("Bill Matching"),
             'res_model': 'purchase.bill.line.match',
             'domain': [
-                ('partner_id', '=', self.partner_id.id),
+                ('partner_id', 'in', (self.partner_id | self.partner_id.commercial_partner_id).ids),
                 ('company_id', 'in', self.env.company.ids),
                 ('purchase_order_id', 'in', [self.id, False]),
             ],
@@ -865,6 +866,8 @@ class PurchaseOrder(models.Model):
         """ This function returns the values to populate the custom dashboard in
             the purchase order views.
         """
+        if not self.env.user._is_internal():
+            raise AccessDenied()
         self.browse().check_access('read')
 
         result = {

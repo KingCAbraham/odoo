@@ -856,6 +856,52 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         # I close the session to generate the journal entries
         current_session.action_pos_session_closing_control()
 
+    def test_order_to_invoice_uses_correct_shipping_address(self):
+        """
+        Test that invoice created from POS uses the correct shipping address
+        same as selected in the POS order.
+        """
+        _, delivery2 = self.env["res.partner"].create([{
+                'name': f"Delivery Address {i + 1}",
+                'type': 'delivery',
+                'parent_id': self.partner1.id,
+            } for i in range(2)]
+        )
+
+        self.pos_config.open_ui()
+        current_session = self.pos_config.current_session_id
+        untax, tax = self.compute_tax(self.product3, 100, 1)
+
+        pos_order = self.PosOrder.create({
+            'company_id': self.env.company.id,
+            'session_id': current_session.id,
+            'partner_id': delivery2.id,
+            'pricelist_id': self.partner1.property_product_pricelist.id,
+            'lines': [(0, 0, {
+                'name': "OL/0001",
+                'product_id': self.product3.id,
+                'price_unit': 100,
+                'qty': 1.0,
+                'tax_ids': [(6, 0, self.product3.taxes_id.ids)],
+                'price_subtotal': untax,
+                'price_subtotal_incl': untax + tax,
+            })],
+            'amount_tax': tax,
+            'amount_total': untax + tax,
+            'amount_paid': 0.0,
+            'amount_return': 0.0,
+            'last_order_preparation_change': '{}'
+        })
+
+        pos_order.action_pos_order_invoice()
+        invoice = pos_order.account_move
+
+        self.assertEqual(
+            invoice.partner_shipping_id.id,
+            delivery2.id,
+            "The shipping address should be 'Delivery Address 2' as selected in the POS order."
+        )
+
     def test_order_to_payment_currency(self):
         """
             In order to test the Point of Sale in module, I will do a full flow from the sale to the payment and invoicing.
@@ -2867,3 +2913,54 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
 
         with self.assertRaises(ValidationError, msg='You cannot delete a customer that has point of sales orders. You can archive it instead.'):
             partner.unlink()
+
+    def test_split_payment_linked_to_accounting_partner(self):
+        self.bank_payment_method.write({'split_transactions': True})
+        self.pos_config.open_ui()
+        current_session = self.pos_config.current_session_id
+
+        child_partner = self.env['res.partner'].create({
+            'name': 'partner1 child',
+            'parent_id': self.partner1.id
+        })
+        product_order = {
+            'amount_paid': 750,
+            'amount_tax': 0,
+            'amount_return': 0,
+            'amount_total': 750,
+            'date_order': fields.Datetime.to_string(fields.Datetime.now()),
+            'fiscal_position_id': False,
+            'lines': [[0, 0, {
+                'discount': 0,
+                'pack_lot_ids': [],
+                'price_unit': 750.0,
+                'product_id': self.product3.id,
+                'price_subtotal': 750.0,
+                'price_subtotal_incl': 750.0,
+                'tax_ids': [[6, False, []]],
+                'qty': 1,
+            }]],
+            'name': 'Order 12345-123-1234',
+            'partner_id': child_partner.id,
+            'session_id': current_session.id,
+            'sequence_number': 2,
+            'payment_ids': [[0, 0, {
+                'amount': 750,
+                'name': fields.Datetime.now(),
+                'payment_method_id': self.bank_payment_method.id
+            }]],
+            'uuid': '12345-123-1234',
+            'user_id': self.env.uid,
+            'to_invoice': False}
+
+        self.PosOrder.sync_from_ui([product_order])
+        current_session.close_session_from_ui()
+        order_balance = current_session.move_id.line_ids.filtered(
+            lambda l: l.account_id.account_type == "asset_receivable"
+            and l.partner_id == self.partner1
+        ).balance
+        payment_balance = current_session.bank_payment_ids.move_id.line_ids.filtered(
+            lambda l: l.account_id.account_type == "asset_receivable"
+            and l.partner_id == self.partner1
+        ).balance
+        self.assertEqual(order_balance + payment_balance, 0)

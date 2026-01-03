@@ -1,6 +1,6 @@
 from markupsafe import Markup
 
-from odoo import _, models, Command
+from odoo import _, api, models
 from odoo.addons.base.models.res_bank import sanitize_account_number
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_is_zero, float_repr, format_list
@@ -65,7 +65,7 @@ EAS_MAPPING = {
     'SG': {'0195': 'l10n_sg_unique_entity_number'},
     'GB': {'9932': 'vat'},
     'GR': {'9933': 'vat'},
-    'HR': {'9934': 'vat'},
+    'HR': {'9934': 'vat', '0088': 'company_registry'},
     'HU': {'9910': 'l10n_hu_eu_vat'},
     'IE': {'9935': 'vat'},
     'IS': {'0196': 'vat'},
@@ -109,6 +109,57 @@ EAS_MAPPING = {
     'WF': {'0009': 'siret', '9957': 'vat', '0002': None},  # Wallis and Futuna
     'YT': {'0009': 'siret', '9957': 'vat', '0002': None},  # Mayotte
 }
+
+# -------------------------------------------------------------------------
+# SUPPORTED FILE TYPES FOR IMPORT
+# -------------------------------------------------------------------------
+SUPPORTED_FILE_TYPES = {
+    'application/pdf': '.pdf',
+    'application/vnd.oasis.opendocument.spreadsheet': '.ods',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+    'image/jpeg': '.jpeg',
+    'image/png': '.png',
+    'text/csv': '.csv',
+}
+
+
+class FloatFmt(float):
+    """ A float with a given precision.
+    The precision is used when formatting the float.
+    """
+    def __new__(cls, value, min_dp=2, max_dp=None):
+        return super().__new__(cls, value)
+
+    def __init__(self, value, min_dp=2, max_dp=None):
+        self.min_dp = min_dp
+        self.max_dp = max_dp
+
+    def __str__(self):
+        if not isinstance(self.min_dp, int) or (self.max_dp is not None and not isinstance(self.max_dp, int)):
+            return "<FloatFmt()>"
+        self_float = float(self)
+        min_dp_int = int(self.min_dp)
+        if self.max_dp is None:
+            return float_repr(self_float, min_dp_int)
+        else:
+            # Format the float to between self.min_dp and self.max_dp decimal places.
+            # We start by formatting to self.max_dp, and then remove trailing zeros,
+            # but always keep at least self.min_dp decimal places.
+            max_dp_int = int(self.max_dp)
+            amount_max_dp = float_repr(self_float, max_dp_int)
+            num_trailing_zeros = len(amount_max_dp) - len(amount_max_dp.rstrip('0'))
+            return float_repr(self_float, max(max_dp_int - num_trailing_zeros, min_dp_int))
+
+    def __repr__(self):
+        if not isinstance(self.min_dp, int) or (self.max_dp is not None and not isinstance(self.max_dp, int)):
+            return "<FloatFmt()>"
+        self_float = float(self)
+        min_dp_int = int(self.min_dp)
+        if self.max_dp is None:
+            return f"FloatFmt({self_float!r}, {min_dp_int!r})"
+        else:
+            max_dp_int = int(self.max_dp)
+            return f"FloatFmt({self_float!r}, {min_dp_int!r}, {max_dp_int!r})"
 
 
 class AccountEdiCommon(models.AbstractModel):
@@ -368,33 +419,35 @@ class AccountEdiCommon(models.AbstractModel):
         return True
 
     def _import_attachments(self, invoice, tree):
-        # Import the embedded PDF in the xml if some are found
+        # Import the embedded documents in the xml if some are found
         attachments = self.env['ir.attachment']
         additional_docs = tree.findall('./{*}AdditionalDocumentReference')
         for document in additional_docs:
             attachment_name = document.find('{*}ID')
             attachment_data = document.find('{*}Attachment/{*}EmbeddedDocumentBinaryObject')
-            if attachment_name is not None \
-                    and attachment_data is not None \
-                    and attachment_data.attrib.get('mimeCode') == 'application/pdf':
+            if attachment_name is not None and attachment_data is not None:
+                mimetype = attachment_data.attrib.get('mimeCode')
+                if not (extension := SUPPORTED_FILE_TYPES.get(mimetype)):
+                    continue
                 text = attachment_data.text
                 # Normalize the name of the file : some e-fff emitters put the full path of the file
                 # (Windows or Linux style) and/or the name of the xml instead of the pdf.
-                # Get only the filename with a pdf extension.
-                name = (attachment_name.text or 'invoice').split('\\')[-1].split('/')[-1].split('.')[0] + '.pdf'
+                # Get only the filename with the right extension.
+                name = (attachment_name.text or 'invoice').split('\\')[-1].split('/')[-1].split('.')[0] + extension
                 attachment = self.env['ir.attachment'].create({
                     'name': name,
                     'res_id': invoice.id,
                     'res_model': 'account.move',
                     'datas': text + '=' * (len(text) % 3),  # Fix incorrect padding
                     'type': 'binary',
-                    'mimetype': 'application/pdf',
+                    'mimetype': mimetype,
                 })
                 # Upon receiving an email (containing an xml) with a configured alias to create invoice, the xml is
                 # set as the main_attachment. To be rendered in the form view, the pdf should be the main_attachment.
                 if invoice.message_main_attachment_id and \
                         invoice.message_main_attachment_id.name.endswith('.xml') and \
-                        'pdf' not in invoice.message_main_attachment_id.mimetype:
+                        'pdf' not in invoice.message_main_attachment_id.mimetype and \
+                        mimetype == 'application/pdf':
                     invoice._message_set_main_attachment_id(attachment, force=True, filter_xml=False)
                 attachments |= attachment
 
@@ -411,7 +464,8 @@ class AccountEdiCommon(models.AbstractModel):
             .with_company(company_id) \
             ._retrieve_partner(name=name, phone=phone, email=email, vat=vat, domain=domain)
         if not partner and name and vat:
-            partner_vals = {'name': name, 'email': email, 'phone': phone, 'street': street, 'street2': street2, 'zip': zip_code, 'city': city}
+            partner_vals = {'name': name, 'email': email, 'phone': phone, 'street': street, 'street2': street2,
+                            'zip': zip_code, 'city': city, 'is_company': True}
             if peppol_eas and peppol_endpoint:
                 partner_vals.update({'peppol_eas': peppol_eas, 'peppol_endpoint': peppol_endpoint})
             country = self.env.ref(f'base.{country_code.lower()}', raise_if_not_found=False) if country_code else False
@@ -427,7 +481,7 @@ class AccountEdiCommon(models.AbstractModel):
         """ Retrieve the bank account, if no matching bank account is found, create it """
         # clear the context, because creation of partner when importing should not depend on the context default values
         ResPartnerBank = self.env['res.partner.bank'].with_env(self.env(context=clean_context(self.env.context)))
-        bank_details = list(map(sanitize_account_number, bank_details))
+        bank_details = list(set(map(sanitize_account_number, bank_details)))
         partner = self.env.company.partner_id if invoice.is_inbound() else invoice.partner_id
         banks_to_create = []
         acc_number_partner_bank_dict = {
@@ -598,6 +652,40 @@ class AccountEdiCommon(models.AbstractModel):
             **deferred_values,
         }
 
+    @api.model
+    def _retrieve_rebate_val(self, tree, xpath_dict, quantity):
+        # Discount. /!\ as no percent discount can be set on a line, need to infer the percentage
+        # from the amount of the actual amount of the discount (the allowance charge)
+        rebate = 0
+        rebate_node = tree.find(xpath_dict['rebate'])
+        net_price_unit_node = tree.find(xpath_dict['net_price_unit'])
+        gross_price_unit_node = tree.find(xpath_dict['gross_price_unit'])
+        if rebate_node is not None:
+            rebate = float(rebate_node.text)
+        elif net_price_unit_node is not None and gross_price_unit_node is not None:
+            rebate = float(gross_price_unit_node.text) - float(net_price_unit_node.text)
+        return rebate
+
+    @api.model
+    def _retrieve_charge_allowance_vals(self, tree, xpath_dict, quantity):
+        charges = []
+        discount_amount = 0
+        for allowance_charge_node in tree.iterfind(xpath_dict['allowance_charge']):
+            charge_indicator = allowance_charge_node.findtext(xpath_dict['allowance_charge_indicator'])
+            amount = float(allowance_charge_node.findtext(xpath_dict['allowance_charge_amount'], default='0'))
+            reason_code = allowance_charge_node.findtext(xpath_dict['allowance_charge_reason_code'], default='')
+            reason = allowance_charge_node.findtext(xpath_dict['allowance_charge_reason'], default='')
+            if charge_indicator.lower() == 'true':
+                charges.append({
+                    'amount': amount,
+                    'line_quantity': quantity,
+                    'reason': reason,
+                    'reason_code': reason_code,
+                })
+            else:
+                discount_amount += amount
+        return discount_amount, charges
+
     def _retrieve_line_vals(self, tree, document_type=False, qty_factor=1):
         """
         Read the xml invoice, extract the invoice line values, compute the odoo values
@@ -648,19 +736,9 @@ class AccountEdiCommon(models.AbstractModel):
         if gross_price_unit_node is not None:
             gross_price_unit = float(gross_price_unit_node.text)
 
-        # rebate (optional)
-        # Discount. /!\ as no percent discount can be set on a line, need to infer the percentage
-        # from the amount of the actual amount of the discount (the allowance charge)
-        rebate = 0
-        rebate_node = tree.find(xpath_dict['rebate'])
-        net_price_unit_node = tree.find(xpath_dict['net_price_unit'])
-        if rebate_node is not None:
-            rebate = float(rebate_node.text)
-        elif net_price_unit_node is not None and gross_price_unit_node is not None:
-            rebate = float(gross_price_unit_node.text) - float(net_price_unit_node.text)
-
         # net_price_unit (mandatory)
         net_price_unit = None
+        net_price_unit_node = tree.find(xpath_dict['net_price_unit'])
         if net_price_unit_node is not None:
             net_price_unit = float(net_price_unit_node.text)
 
@@ -692,23 +770,11 @@ class AccountEdiCommon(models.AbstractModel):
         # quantity
         quantity = delivered_qty * qty_factor
 
+        # rebate (optional)
+        rebate = self._retrieve_rebate_val(tree, xpath_dict, quantity)
+
         # Charges are collected (they are used to create new lines), Allowances are transformed into discounts
-        charges = []
-        discount_amount = 0
-        for allowance_charge_node in tree.iterfind(xpath_dict['allowance_charge']):
-            charge_indicator = allowance_charge_node.findtext(xpath_dict['allowance_charge_indicator'])
-            amount = float(allowance_charge_node.findtext(xpath_dict['allowance_charge_amount'], default='0'))
-            reason_code = allowance_charge_node.findtext(xpath_dict['allowance_charge_reason_code'], default='')
-            reason = allowance_charge_node.findtext(xpath_dict['allowance_charge_reason'], default='')
-            if charge_indicator.lower() == 'true':
-                charges.append({
-                    'amount': amount,
-                    'line_quantity': quantity,
-                    'reason': reason,
-                    'reason_code': reason_code,
-                })
-            else:
-                discount_amount += amount
+        discount_amount, charges = self._retrieve_charge_allowance_vals(tree, xpath_dict, quantity)
 
         # price_unit
         charge_amount = sum(d['amount'] for d in charges)
@@ -781,7 +847,7 @@ class AccountEdiCommon(models.AbstractModel):
                     return tax
         return self.env['account.tax']
 
-    def _retrieve_taxes(self, record, line_values, tax_type):
+    def _retrieve_taxes(self, record, line_values, tax_type, tax_exigibility=False):
         """
         Retrieve the taxes on the document line at import.
 
@@ -803,6 +869,17 @@ class AccountEdiCommon(models.AbstractModel):
             tax = self.env['account.tax']
             if hasattr(record, '_get_specific_tax'):
                 tax = record._get_specific_tax(line_values['name'], 'percent', amount, tax_type)
+            if tax_exigibility:
+                if not tax and tax_exigibility:
+                    tax = self.env['account.tax'].search(domain + [('price_include', '=', False), ('tax_exigibility', '=', tax_exigibility)], limit=1)
+                if not tax and tax_exigibility:
+                    tax = self.env['account.tax'].search(domain + [('price_include', '=', True), ('tax_exigibility', '=', tax_exigibility)], limit=1)
+                if not tax:
+                    logs.append(
+                        _("Tax with matching exigibility could not be retrieved: '%(exigibility)s' for line '%(line)s'.",
+                        exigibility=tax_exigibility,
+                        line=line_values['name']),
+                    )
             if not tax:
                 tax = self.env['account.tax'].search(domain + [('price_include', '=', False)], limit=1)
             if not tax:

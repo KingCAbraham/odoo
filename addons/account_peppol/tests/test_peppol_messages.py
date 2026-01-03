@@ -6,6 +6,7 @@ from urllib import parse
 
 from requests import PreparedRequest, Response, Session
 
+from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests.common import tagged, freeze_time
 from odoo.tools.misc import file_open
@@ -218,6 +219,24 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
         response.json = lambda: responses[url]
         return response
 
+    def test_non_xml_compatible_characters(self):
+        """
+        Test that non xml compatible characters doesn't block Peppol Invoice sending
+        """
+        move = self.create_move(self.valid_partner)
+        product_a = self._create_product(
+            name='Test\x02Product',
+            lst_price=1000.0,
+            standard_price=800.0
+        )
+        move.invoice_line_ids[0].product_id = product_a
+        move.action_post()
+
+        wizard = self.create_send_and_print(move, sending_methods=['peppol'])
+        self.assertEqual(wizard.invoice_edi_format, 'ubl_bis3')
+        wizard.action_send_and_print()
+        self.assertEqual(self._get_mail_message(move).preview, 'The invoice has been sent to the Peppol Access Point. The following attachments were sent with the XML:')
+
     def test_attachment_placeholders(self):
         move = self.create_move(self.valid_partner)
         move.action_post()
@@ -241,7 +260,7 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
 
         wizard.sending_methods = ['peppol']
         wizard.action_send_and_print()
-        self.assertEqual(self._get_mail_message(move).preview, 'The document has been sent to the Peppol Access Point for processing')
+        self.assertEqual(self._get_mail_message(move).preview, 'The invoice has been sent to the Peppol Access Point. The following attachments were sent with the XML:')
 
     def test_send_peppol_alerts_not_valid_partner(self):
         move = self.create_move(self.invalid_partner)
@@ -420,7 +439,6 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
             'peppol_eas': '0208',
             'peppol_endpoint': '0477472701',
             'invoice_edi_format': 'ubl_bis3',
-            'invoice_sending_method': 'peppol',
         }])
         # but not valid for company 2
         new_partner.with_company(company_2).invoice_edi_format = 'nlcius'
@@ -429,7 +447,6 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
             'peppol_eas': '0208',
             'peppol_endpoint': '0477472701',
             'invoice_edi_format': 'nlcius',
-            'invoice_sending_method': 'peppol',
         }])
         move_1 = self.create_move(new_partner)
         move_2 = self.create_move(new_partner)
@@ -441,8 +458,8 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
         self.assertEqual((move_1 + move_2 + move_3).mapped('is_being_sent'), [True, True, True])
         # the cron is run asynchronously and should be agnostic from the current self.env.company
         self.env.ref('account.ir_cron_account_move_send').with_company(company_2).method_direct_trigger()
-        # only move 1 & 2 should be processed, move_3 is related to an invalid partner (with regard to company_2) thus should fail to send
-        self.assertEqual((move_1 + move_2 + move_3).mapped('peppol_move_state'), ['processing', 'processing', 'error'])
+        # only move 1 & 2 should be processed, move_3 is related to an invalid partner (with regard to company_2) thus should not be sent by Peppol
+        self.assertEqual((move_1 + move_2 + move_3).mapped('peppol_move_state'), ['processing', 'processing', False])
 
     def test_available_peppol_sending_methods(self):
         company_us = self.setup_other_company()['company']  # not a valid Peppol country
@@ -525,3 +542,52 @@ class TestPeppolMessage(TestAccountMoveSendCommon):
         partners._compute_available_peppol_eas()
         for partner in partners:
             self.assertFalse('odemo' in partner.available_peppol_eas)
+
+    def test_automatic_invoicing_auto_update_partner_peppol_status(self):
+        self.ensure_installed('sale')
+        tax = self.percent_tax(21.0)
+        product = self._create_product(lst_price=100.0, taxes_id=tax)
+        partner = self.env['res.partner'].create({
+            'name': 'partner_be',
+            'street': "Rue des Bourlottes 9",
+            'zip': "1367",
+            'city': "Ramillies",
+            'vat': 'BE0477472701',
+            'company_registry': '0477472701',
+            'invoice_sending_method': 'peppol',
+            'invoice_edi_format': 'ubl_bis3',
+            'company_id': self.env.company.id,
+            'country_id': self.env.ref('base.be').id,
+        })
+        self.env.user.groups_id |= self.env.ref('sales_team.group_sale_salesman')
+
+        self.env['ir.config_parameter'].sudo().set_param('sale.automatic_invoice', True)
+        so = self._create_sale_order_one_line(product_id=product, partner_id=partner)
+
+        payment_method = self.env.ref('payment.payment_method_unknown')
+
+        dummy_provider = self.env['payment.provider'].create({
+            'name': "Dummy Provider",
+            'code': 'none',
+            'state': 'test',
+            'is_published': True,
+            'payment_method_ids': [Command.set(payment_method.ids)],
+            'allow_tokenization': True,
+        })
+        self._create_dummy_payment_method_for_provider(
+            provider=dummy_provider,
+            journal=self.company_data['default_journal_bank'],
+        )
+        transaction = self.env['payment.transaction'].create({
+            'payment_method_id': payment_method.id,
+            'amount': so.amount_total,
+            'state': 'done',
+            'provider_id': dummy_provider.id,
+            'currency_id': so.currency_id.id,
+            'reference': so.name,
+            'partner_id': partner.id,
+            'sale_order_ids': [Command.set(so.ids)],
+        })
+        transaction.sudo()._post_process()
+
+        self.assertRecordValues(partner, [{'peppol_verification_state': 'valid'}])

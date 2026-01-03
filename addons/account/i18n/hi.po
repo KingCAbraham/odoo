@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* account
+# * account
 #
 # Translators:
 # Gautam Hingrajiya, 2024
@@ -13,20 +13,22 @@
 # Thomas Becquevort, 2025
 # Pandya Rahul <pandyarahul4u@gmail.com>, 2025
 # Ujjawal Pathak, 2025
-#
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:37+0000\n"
-"PO-Revision-Date: 2024-09-25 09:41+0000\n"
-"Last-Translator: Ujjawal Pathak, 2025\n"
-"Language-Team: Hindi (https://app.transifex.com/odoo/teams/41243/hi/)\n"
+"POT-Creation-Date: 2025-12-12 18:36+0000\n"
+"PO-Revision-Date: 2025-12-26 14:00+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
+"Language-Team: Hindi <https://translate.odoo.com/projects/odoo-18/account/hi/"
+">\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__type
@@ -205,18 +207,6 @@ msgstr "%(ref)s (%(currency_amount)s)"
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr "%(tag)s (%(country_code)s)"
-
-#. module: account
-#. odoo-python
-#: code:addons/account/models/account_tax.py:0
-msgid ""
-"%(tax_account)s (%(account_name)s) should be an account of type \"%"
-"(receivable)s\" or \"%(payable)s\" with both options \"%"
-"(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
-msgstr ""
-"आपके टैक्स खाते %(tax_account)s (%(account_name)s)  को या तो \"%(receivable)s\" "
-"या \"%(payable)s\" खाते जैसे होना चाहिए. इसमें \"%(allow_reconciliation)s\" और \"%"
-"(non_trade)s\" विकल्प चालू होने चाहिए."
 
 #. module: account
 #. odoo-python
@@ -1778,6 +1768,14 @@ msgid "Account Chart Template"
 msgstr "अकाउंट चार्ट टेंप्लेट"
 
 #. module: account
+#. odoo-python
+#: code:addons/account/models/account_code_mapping.py:0
+msgid ""
+"Account Code Mapping cannot be accessed directly. It is designed to be used "
+"only through the Chart of Accounts."
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_report_line__account_codes_formula
 msgid "Account Codes Formula Shortcut"
 msgstr "अकाउंट कोड फ़ॉर्मूला शॉर्टकट"
@@ -2400,7 +2398,7 @@ msgstr "जोड़ना"
 #: model:ir.actions.server,name:account.action_new_bank_setting
 #: model:ir.ui.menu,name:account.menu_action_account_bank_journal_form
 msgid "Add a Bank Account"
-msgstr ""
+msgstr "बैंक खाता जोड़ें"
 
 #. module: account
 #: model:ir.model.fields.selection,name:account.selection__res_company__terms_type__plain
@@ -3166,7 +3164,7 @@ msgstr "समयावधि के शुरू होने पर"
 #. odoo-javascript
 #: code:addons/account/static/src/components/mail_attachments/mail_attachments.xml:0
 msgid "Attach"
-msgstr ""
+msgstr "अटैच करें"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.account_move_send_wizard_form
@@ -3201,6 +3199,11 @@ msgstr "अटैचमेंट काउंट"
 #: model:ir.model.fields,field_description:account.field_account_payment__attachment_ids
 msgid "Attachments"
 msgstr "अटैचमेंट"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__attachments_not_supported
+msgid "Attachments Not Supported"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_mail_mail__account_audit_log_activated
@@ -4333,6 +4336,8 @@ msgid ""
 "Changing your name is not allowed once invoices have been issued for your "
 "account. Please contact us directly for this operation."
 msgstr ""
+"एक बार आपके खाते के लिए इनवॉइस के जारी होने के बाद अपना नाम बदलने की अनुमति नहीं है. "
+"ऐसा करने के लिए आपके सीधे हमसे संपर्क करना होगा।"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_res_company__chart_template
@@ -6343,6 +6348,11 @@ msgid "Display Amount"
 msgstr "रकम दिखाएं"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__display_attachments_widget
+msgid "Display Attachments Widget"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_term_line__display_days_next_month
 msgid "Display Days Next Month"
 msgstr "अगले महीने के दिन दिखाएं"
@@ -8084,6 +8094,11 @@ msgid "How total tax amount is computed in orders and invoices"
 msgstr "ऑर्डर और इनवॉइस में कुल टैक्स राशि की गणना कैसे की जाती है"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "ICE:"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__id
 #: model:ir.model.fields,field_description:account.field_account_account_tag__id
 #: model:ir.model.fields,field_description:account.field_account_accrued_orders_wizard__id
@@ -8946,11 +8961,6 @@ msgid "Invoice Outstanding Credits Debits Widget"
 msgstr "इनवॉइस आउटस्टैंडिंग क्रेडिट डेबिट विजेट"
 
 #. module: account
-#: model:ir.actions.report,name:account.account_invoices
-msgid "Invoice PDF"
-msgstr "इनवॉइस पीडीएफ़"
-
-#. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__invoice_partner_display_name
 #: model:ir.model.fields,field_description:account.field_account_move__invoice_partner_display_name
 msgid "Invoice Partner Display Name"
@@ -9642,7 +9652,7 @@ msgstr "जून"
 #. module: account
 #: model:ir.model,name:account.model_kpi_provider
 msgid "KPI Provider"
-msgstr ""
+msgstr "केपीआई प्रोवाइडर"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_journal__kanban_dashboard
@@ -11636,6 +11646,7 @@ msgstr "PAY001"
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
+#: model:ir.actions.report,name:account.account_invoices
 msgid "PDF"
 msgstr "पीडीएफ"
 
@@ -14115,7 +14126,7 @@ msgstr "शेयर करें"
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_journal__code
 msgid "Short Code"
-msgstr ""
+msgstr "शॉर्ट कोड"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__code
@@ -15745,6 +15756,8 @@ msgid ""
 "The name of the email alias, e.g. 'jobs' if you want to catch emails for "
 "<jobs@example.odoo.com>"
 msgstr ""
+"ईमेल उपनाम का नाम, जैसे कि 'नौकरियां', अगर आप jobs@example.odoo.com के लिए ईमेल "
+"पाना चाहते हैं"
 
 #. module: account
 #. odoo-python
@@ -16617,8 +16630,8 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "This setting cannot be changed after an invoice is created."
-msgstr "एक बार इनवॉइस बन जाने के बाद, इस सेटिंग में बदलाव नहीं किया जा सकता."
+msgid "This setting locks once a journal entry is created."
+msgstr ""
 
 #. module: account
 #. odoo-python
@@ -17131,7 +17144,7 @@ msgstr "यूनिट प्राइस:"
 #: model:ir.model.fields,field_description:account.field_account_invoice_report__product_uom_id
 #: model:ir.model.fields,field_description:account.field_account_move_line__product_uom_id
 msgid "Unit of Measure"
-msgstr ""
+msgstr "माप की इकाई"
 
 #. module: account
 #. odoo-python
@@ -17142,7 +17155,7 @@ msgstr "यूनाइटेड स्टेट ऑफ़ अमेरिका
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
 msgid "Units of Measure"
-msgstr ""
+msgstr "माप की इकाई"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_payment_form
@@ -19286,6 +19299,21 @@ msgstr "{{ object.company_id.name }} इनवॉइस (Ref {{ object.name or '
 msgid ""
 "{{ object.company_id.name }} Payment Receipt (Ref {{ object.name or 'n/a' }})"
 msgstr "{{ object.company_id.name }} पेमेंट रसीद (Ref {{ object.name or 'n/a' }})"
+
+#~ msgid "Invoice PDF"
+#~ msgstr "इनवॉइस पीडीएफ़"
+
+#~ msgid "This setting cannot be changed after an invoice is created."
+#~ msgstr "एक बार इनवॉइस बन जाने के बाद, इस सेटिंग में बदलाव नहीं किया जा सकता."
+
+#~ msgid ""
+#~ "%(tax_account)s (%(account_name)s) should be an account of type \"%"
+#~ "(receivable)s\" or \"%(payable)s\" with both options \"%"
+#~ "(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
+#~ msgstr ""
+#~ "आपके टैक्स खाते %(tax_account)s (%(account_name)s)  को या तो \"%"
+#~ "(receivable)s\" या \"%(payable)s\" खाते जैसे होना चाहिए. इसमें \"%"
+#~ "(allow_reconciliation)s\" और \"%(non_trade)s\" विकल्प चालू होने चाहिए."
 
 #~ msgid ""
 #~ "Accrual entry created on %(date)s: %(accrual_entry)s.                    "

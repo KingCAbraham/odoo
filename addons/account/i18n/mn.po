@@ -33,13 +33,14 @@
 # Baskhuu Lodoikhuu <baskhuujacara@gmail.com>, 2025
 # Munkhbaatar Gombosuren, 2025
 # Bayarkhuu Bataa <bbayarkhuu@gmail.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:37+0000\n"
-"PO-Revision-Date: 2025-08-25 06:40+0000\n"
-"Last-Translator: Lodoikhuu <baskhuujacara@gmail.com>\n"
+"POT-Creation-Date: 2025-12-12 18:36+0000\n"
+"PO-Revision-Date: 2025-12-26 15:41+0000\n"
+"Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Mongolian <https://translate.odoo.com/projects/odoo-18/"
 "account/mn/>\n"
 "Language: mn\n"
@@ -47,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__type
@@ -227,18 +228,6 @@ msgstr ""
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr ""
-
-#. module: account
-#. odoo-python
-#: code:addons/account/models/account_tax.py:0
-msgid ""
-"%(tax_account)s (%(account_name)s) should be an account of type \"%"
-"(receivable)s\" or \"%(payable)s\" with both options \"%"
-"(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
-msgstr ""
-"%(tax_account)s (%(account_name)s) нь \"%(receivable)s\" эсвэл \"%"
-"(payable)s\" төрөлтэй данс байх ёстой бөгөөд \"%(allow_reconciliation)s\" "
-"болон \"%(non_trade)s\" гэсэн тохиргоонууд идэвхтэй байх шаардлагатай."
 
 #. module: account
 #. odoo-python
@@ -1931,6 +1920,14 @@ msgid "Account Chart Template"
 msgstr "Дансны модны загвар"
 
 #. module: account
+#. odoo-python
+#: code:addons/account/models/account_code_mapping.py:0
+msgid ""
+"Account Code Mapping cannot be accessed directly. It is designed to be used "
+"only through the Chart of Accounts."
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_report_line__account_codes_formula
 msgid "Account Codes Formula Shortcut"
 msgstr ""
@@ -3373,6 +3370,11 @@ msgstr "Хавсралтын тоо"
 #: model:ir.model.fields,field_description:account.field_account_payment__attachment_ids
 msgid "Attachments"
 msgstr "Хавсралтууд"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__attachments_not_supported
+msgid "Attachments Not Supported"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_mail_mail__account_audit_log_activated
@@ -6550,6 +6552,11 @@ msgid "Display Amount"
 msgstr ""
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__display_attachments_widget
+msgid "Display Attachments Widget"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_term_line__display_days_next_month
 msgid "Display Days Next Month"
 msgstr ""
@@ -7102,7 +7109,7 @@ msgstr ""
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__alias_domain
 msgid "Email domain e.g. 'example.com' in 'odoo@example.com'"
-msgstr ""
+msgstr "Имэй домэйн ж.ш 'example.com' цаашлаад 'odoo@example.com' гэх мэт"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_move_send_wizard__mail_template_id
@@ -8294,6 +8301,11 @@ msgstr ""
 "Захиалга болон нэхэмжлэл дээрх татварын нийлбэр дүн хэрхэн тооцоглогдох"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "ICE:"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__id
 #: model:ir.model.fields,field_description:account.field_account_account_tag__id
 #: model:ir.model.fields,field_description:account.field_account_accrued_orders_wizard__id
@@ -9167,11 +9179,6 @@ msgstr "Нэхэмжлэл онлайнаар төлөх"
 #: model:ir.model.fields,field_description:account.field_account_move__invoice_outstanding_credits_debits_widget
 msgid "Invoice Outstanding Credits Debits Widget"
 msgstr "Нэхэмжлэлийн тулгагдаагүй дебет ба кредит шалгах"
-
-#. module: account
-#: model:ir.actions.report,name:account.account_invoices
-msgid "Invoice PDF"
-msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__invoice_partner_display_name
@@ -11568,7 +11575,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account/controllers/terms.py:0
 msgid "Oops"
-msgstr ""
+msgstr "Өө яанаа"
 
 #. module: account
 #. odoo-python
@@ -11865,6 +11872,7 @@ msgstr ""
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
+#: model:ir.actions.report,name:account.account_invoices
 msgid "PDF"
 msgstr "PDF"
 
@@ -12486,7 +12494,7 @@ msgstr "Үйлдлийг гүйцэтгэхийн тулд мөр бүрийн �
 #. module: account
 #: model:ir.model.fields.selection,name:account.selection__account_reconcile_model_line__amount_type__percentage_st_line
 msgid "Percentage of statement line"
-msgstr ""
+msgstr "Гүйлгээний дүнгийн хувь"
 
 #. module: account
 #. odoo-python
@@ -13677,7 +13685,7 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.account_default_terms_and_conditions
 msgid "STANDARD TERMS AND CONDITIONS OF SALE"
-msgstr ""
+msgstr "БОРЛУУЛАЛТЫН СТАНДАРТ НӨХЦӨЛ БОЛОН ЖУРАМ"
 
 #. module: account
 #: model:account.account,name:account.1_expense_salary
@@ -15693,7 +15701,7 @@ msgstr "Энэхүү компанийн татварын тайлангууды�
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
 msgid "The currency rate must be strictly positive."
-msgstr ""
+msgstr "Валютын ханш нь заавал эерэг тоо байх ёстой."
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__currency_id
@@ -16263,7 +16271,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account/controllers/terms.py:0
 msgid "The requested page is invalid, or doesn't exist anymore."
-msgstr ""
+msgstr "Гарын үсгийн хүсэлт дахь хуудас буруу, эсвэл алга болсон байна."
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_move_line__amount_residual_currency
@@ -16983,8 +16991,8 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "This setting cannot be changed after an invoice is created."
-msgstr "Нэхэмжлэл үүсгэсний дараа энэ тохиргоог өөрчлөх боломжгүй."
+msgid "This setting locks once a journal entry is created."
+msgstr ""
 
 #. module: account
 #. odoo-python
@@ -17418,7 +17426,7 @@ msgstr "Төрлийн нэр"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.partner_view_buttons
 msgid "Type a message..."
-msgstr ""
+msgstr "Зурвасын төрөл..."
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_bank_statement_line__qr_code_method
@@ -19152,6 +19160,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account.account_default_terms_and_conditions
 msgid "You should update this document to reflect your T&amp;C."
 msgstr ""
+"Энэ баримтыг таны Үйлчилгээний нөхцөл (T&amp;C)-ийг тусгахаар шинэчлэх "
+"шаардлагатай."
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.portal_my_home_invoice
@@ -19373,7 +19383,7 @@ msgstr "ж.нь. https://www.odoo.com"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.view_account_journal_form
 msgid "e.g. mycompany.com"
-msgstr ""
+msgstr "ж.ш mycompany.com"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_res_partner__invoice_edi_format
@@ -19608,7 +19618,7 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "units"
-msgstr ""
+msgstr "ширхэг"
 
 #. module: account
 #. odoo-javascript
@@ -19683,6 +19693,18 @@ msgid ""
 msgstr ""
 "{{ object.company_id.name }} Төлбөрийн баримт (Лавлах {{ object.name or 'n/"
 "a' }})"
+
+#~ msgid "This setting cannot be changed after an invoice is created."
+#~ msgstr "Нэхэмжлэл үүсгэсний дараа энэ тохиргоог өөрчлөх боломжгүй."
+
+#~ msgid ""
+#~ "%(tax_account)s (%(account_name)s) should be an account of type \"%"
+#~ "(receivable)s\" or \"%(payable)s\" with both options \"%"
+#~ "(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
+#~ msgstr ""
+#~ "%(tax_account)s (%(account_name)s) нь \"%(receivable)s\" эсвэл \"%"
+#~ "(payable)s\" төрөлтэй данс байх ёстой бөгөөд \"%(allow_reconciliation)s\" "
+#~ "болон \"%(non_trade)s\" гэсэн тохиргоонууд идэвхтэй байх шаардлагатай."
 
 #~ msgid ""
 #~ "Accrual entry created on %(date)s: %(accrual_entry)s.                    "

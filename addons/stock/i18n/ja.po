@@ -10,12 +10,13 @@
 # Junko Augias, 2025
 # Yoshi Tashiro <tashiro@quartile.co>, 2025.
 # "Junko Augias (juau)" <juau@odoo.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-27 01:48+0000\n"
-"PO-Revision-Date: 2025-10-27 22:21+0000\n"
+"PO-Revision-Date: 2025-12-26 14:00+0000\n"
 "Last-Translator: \"Junko Augias (juau)\" <juau@odoo.com>\n"
 "Language-Team: Japanese <https://translate.odoo.com/projects/odoo-18/stock/"
 "ja/>\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: stock
 #. odoo-python
@@ -773,7 +774,7 @@ msgstr "<span class=\"o_stat_text\">トレーサビリティ</span>"
 #: model_terms:ir.ui.view,arch_db:stock.report_delivery_document
 #: model_terms:ir.ui.view,arch_db:stock.report_picking
 msgid "<span><strong>Delivery Address:</strong></span>"
-msgstr "<span><strong>配送先住所:</strong></span>"
+msgstr "<span><strong>配送先:</strong></span>"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_return_slip
@@ -832,7 +833,7 @@ msgstr "<strong>配送</strong>"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.report_picking
 msgid "<strong>Delivery address</strong>"
-msgstr "<strong>配送先住所</strong>"
+msgstr "<strong>配送先</strong>"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_inventory_conflict_form_view
@@ -1148,7 +1149,7 @@ msgstr "住所"
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_rule__partner_address_id
 msgid "Address where goods should be delivered. Optional."
-msgstr "製品の配送先住所。オプション。"
+msgstr "製品の配送先。オプション。"
 
 #. module: stock
 #: model:ir.ui.menu,name:stock.menu_stock_adjustments
@@ -2603,7 +2604,7 @@ msgstr "DEMO_UOM"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.res_config_settings_view_form
 msgid "DHL Connector"
-msgstr ""
+msgstr "DHLコネクタ"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_res_config_settings__module_delivery_dhl
@@ -2906,7 +2907,7 @@ msgstr "出荷"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.view_picking_form
 msgid "Delivery Address"
-msgstr "配送先住所"
+msgstr "配送先"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_lot_report__delivery_date
@@ -3090,7 +3091,7 @@ msgstr "移動先梱包IDドメイン"
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_move__partner_id
 msgid "Destination Address "
-msgstr "配送先住所"
+msgstr "配送先 "
 
 #. module: stock
 #. odoo-python
@@ -4001,7 +4002,7 @@ msgstr "履歴"
 #. odoo-javascript
 #: code:addons/stock/static/src/views/search/stock_orderpoint_search_panel.xml:0
 msgid "Horizon"
-msgstr "水平"
+msgstr "計画期間"
 
 #. module: stock
 #: model:ir.model.fields,help:stock.field_stock_picking_type__reservation_method
@@ -4630,7 +4631,7 @@ msgstr "在庫ロケーション"
 #. module: stock
 #: model:ir.model.fields.selection,name:stock.selection__stock_location__usage__inventory
 msgid "Inventory Loss"
-msgstr "在庫ロス"
+msgstr "在庫損失"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.product_template_search_view_inherit_stock
@@ -4646,7 +4647,7 @@ msgstr "手持在庫"
 #. module: stock
 #: model:ir.actions.act_window,name:stock.stock_picking_type_action
 msgid "Inventory Overview"
-msgstr "在庫管理概要"
+msgstr "在庫の概要"
 
 #. module: stock
 #: model:ir.model.fields,field_description:stock.field_stock_quant__inventory_quantity_set
@@ -4851,12 +4852,12 @@ msgstr "ノートパソコン"
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
 msgid "Last 12 Months"
-msgstr "過去12か月"
+msgstr "直近12か月"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
 msgid "Last 3 Months"
-msgstr "過去3か月"
+msgstr "直近3か月"
 
 #. module: stock
 #: model_terms:ir.ui.view,arch_db:stock.stock_move_line_view_search
@@ -8191,7 +8192,7 @@ msgstr "SSCC:"
 #. module: stock
 #: model_terms:res.company,invoice_terms_html:stock.res_company_1
 msgid "STANDARD TERMS AND CONDITIONS OF SALE"
-msgstr "標準的な販売条件"
+msgstr "販売に関する標準取引条件"
 
 #. module: stock
 #. odoo-javascript
@@ -9608,10 +9609,10 @@ msgid ""
 "demand flow. The requested delivery address will be the customer delivery "
 "address and not your warehouse."
 msgstr ""
-"これにより、仕入先に顧客への配送を要求するために、プロダクトに適用する直送"
-"ルートが追加されます。 直送するプロダクトは、販売オーダが確定されると、見積依"
-"頼を生成します。これはオンデマンドフローです。要求された配送先住所は、倉庫で"
-"はなく、顧客の配送先住所になります。"
+"これにより、仕入先に顧客への配送を要求するために、プロダクトに適用する直送ル"
+"ートが追加されます。 直送するプロダクトは、販売オーダが確定されると、見積依頼"
+"を生成します。これはオンデマンドフローです。要求された配送先は、倉庫ではなく"
+"、顧客の配送先になります。"
 
 #. module: stock
 #. odoo-python
@@ -9856,7 +9857,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/stock/models/stock_rule.py:0
 msgid "Time Horizon"
-msgstr "時間軸"
+msgstr "時間計画期間"
 
 #. module: stock
 #: model:digest.tip,name:stock.digest_tip_stock_1

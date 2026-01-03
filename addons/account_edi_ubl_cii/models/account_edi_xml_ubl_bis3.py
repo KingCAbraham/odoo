@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, _
+from odoo import _, api, models
 from odoo.tools.misc import str2bool
 from odoo.addons.account.tools import dict_to_xml
-from odoo.addons.account_edi_ubl_cii.models.account_edi_xml_ubl_20 import FloatFmt, UBL_NAMESPACES
+from odoo.addons.account_edi_ubl_cii.models.account_edi_common import FloatFmt
+from odoo.addons.account_edi_ubl_cii.models.account_edi_xml_ubl_20 import UBL_NAMESPACES
 
 from stdnum.no import mva
+
+CHORUS_PRO_PEPPOL_ID = "0009:11000201100044"
 
 
 class AccountEdiXmlUBLBIS3(models.AbstractModel):
@@ -27,6 +30,10 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
     Thus, EHF 3 and Bis 3 are actually the same format. The specific rules for NO defined in Bis 3 are added in Bis 3.
     """
 
+    @api.model
+    def _is_customer_behind_chorus_pro(self, customer):
+        return customer.peppol_eas and customer.peppol_endpoint and f"{customer.peppol_eas}:{customer.peppol_endpoint}" == CHORUS_PRO_PEPPOL_ID
+
     # -------------------------------------------------------------------------
     # EXPORT
     # -------------------------------------------------------------------------
@@ -42,6 +49,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_country_vals(self, country):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_country_vals(country)
 
         vals.pop('name', None)
@@ -50,6 +59,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_party_tax_scheme_vals_list(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_partner_party_tax_scheme_vals_list(partner, role)
 
         if not partner.vat:
@@ -75,6 +86,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_party_legal_entity_vals_list(self, partner):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_partner_party_legal_entity_vals_list(partner)
 
         for vals in vals_list:
@@ -106,6 +119,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_contact_vals(self, partner):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_partner_contact_vals(partner)
 
         vals.pop('id', None)
@@ -114,6 +129,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         if (
             role == 'delivery'
             # If the user hasn't updated the module, we just don't render `DeliveryParty` because the UBL
@@ -141,6 +158,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_party_identification_vals_list(self, partner):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_partner_party_identification_vals_list(partner)
 
         if partner.country_code == 'NL' and partner.peppol_endpoint:
@@ -155,6 +174,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_delivery_vals_list(self, invoice):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         supplier = invoice.company_id.partner_id.commercial_partner_id
         customer = invoice.partner_id
 
@@ -185,6 +206,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_partner_address_vals(self, partner):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_partner_address_vals(partner)
         # schematron/openpeppol/3.13.0/xslt/CEN-EN16931-UBL.xslt
         # [UBL-CR-225]-A UBL invoice should not include the AccountingCustomerParty Party PostalAddress CountrySubentityCode
@@ -193,6 +216,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_financial_institution_branch_vals(self, bank):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_financial_institution_branch_vals(bank)
         # schematron/openpeppol/3.13.0/xslt/CEN-EN16931-UBL.xslt
         # [UBL-CR-664]-A UBL invoice should not include the FinancialInstitutionBranch FinancialInstitution
@@ -203,6 +228,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_invoice_payment_means_vals_list(self, invoice):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_invoice_payment_means_vals_list(invoice)
 
         for vals in vals_list:
@@ -215,6 +242,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_tax_category_list(self, customer, supplier, taxes):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_tax_category_list(customer, supplier, taxes)
 
         for vals in vals_list:
@@ -224,6 +253,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_invoice_tax_totals_vals_list(self, invoice, taxes_vals):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_invoice_tax_totals_vals_list(invoice, taxes_vals)
 
         for vals in vals_list:
@@ -236,6 +267,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_invoice_line_item_vals(self, line, taxes_vals):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         line_item_vals = super()._get_invoice_line_item_vals(line, taxes_vals)
 
         for val in line_item_vals['classified_tax_category_vals']:
@@ -249,6 +282,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_invoice_line_allowance_vals_list(self, line, tax_values_list=None):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals_list = super()._get_invoice_line_allowance_vals_list(line, tax_values_list=tax_values_list)
 
         for vals in vals_list:
@@ -258,6 +293,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _get_invoice_line_vals(self, line, line_id, taxes_vals):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._get_invoice_line_vals(line, line_id, taxes_vals)
 
         vals.pop('tax_total_vals', None)
@@ -275,6 +312,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
 
     def _export_invoice_vals(self, invoice):
         # EXTENDS account.edi.xml.ubl_21
+        # Old helper not used by default (see _export_invoice override)
+        # If you change this method, please change the corresponding new helper (at the end of this file).
         vals = super()._export_invoice_vals(invoice)
 
         vals['vals'].update({
@@ -293,6 +332,12 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                     'id': invoice.ref,
                     'issue_date': None,
                 }
+            })
+
+        # For B2G transactions in Germany: set the buyer_reference to the Leitweg-ID (code 0204)
+        if invoice.commercial_partner_id.peppol_eas == '0204':
+            vals['vals'].update({
+                'buyer_reference': invoice.commercial_partner_id.peppol_endpoint,
             })
 
         return vals
@@ -479,14 +524,11 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
     # -------------------------------------------------------------------------
 
     def _export_invoice(self, invoice, convert_fixed_taxes=True):
-        # Only for BIS3 invoices: if the 'account_edi_ubl_cii.use_new_dict_to_xml_helpers' param is set,
-        # use the new dict_to_xml helpers.
-        if (
-            self._name == 'account.edi.xml.ubl_bis3'
-            and str2bool(
-                self.env['ir.config_parameter'].sudo().get_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True),
-                default=True,
-            )
+        # Use the new dict_to_xml helpers by default
+        # unless the 'account_edi_ubl_cii.use_new_dict_to_xml_helpers' param is set to False.
+        if str2bool(
+            self.env['ir.config_parameter'].sudo().get_param('account_edi_ubl_cii.use_new_dict_to_xml_helpers', True),
+            default=True,
         ):
             return self._export_invoice_new(invoice)
 
@@ -510,6 +552,7 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
             'cbc:UBLVersionID': None,
             'cbc:CustomizationID': {'_text': self._get_customization_ids()['ubl_bis3']},
             'cbc:ProfileID': {'_text': 'urn:fdc:peppol.eu:2017:poacc:billing:01:1.0'},
+            'cbc:TaxCurrencyCode': {'_text': vals['tax_currency_code']},
         })
 
         # [NL-R-001] For suppliers in the Netherlands, if the document is a creditnote, the document MUST
@@ -554,6 +597,11 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                 'cac:Address': self._get_address_node({'partner': shipping_partner})
             },
         }
+        # TODO master: clean that code a bit hacky, when the module account_add_gln is merged with account
+        if gln := 'global_location_number' in shipping_partner._fields and shipping_partner.global_location_number:
+            document_node['cac:Delivery']['cac:DeliveryLocation'].update({
+                'cbc:ID': {'schemeID': '0088', '_text': gln},
+            })
 
     def _add_invoice_payment_means_nodes(self, document_node, vals):
         super()._add_invoice_payment_means_nodes(document_node, vals)
@@ -662,79 +710,6 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         return financial_account_node
 
     # -------------------------------------------------------------------------
-    # EXPORT: Templates for document amount nodes
-    # -------------------------------------------------------------------------
-
-    def _get_tax_subtotal_node(self, vals):
-        # Compute total tax amount
-        tax_subtotal_node = super()._get_tax_subtotal_node(vals)
-        tax_subtotal_node['cbc:Percent'] = None
-        return tax_subtotal_node
-
-    def _get_tax_category_node(self, vals):
-        grouping_key = vals['grouping_key']
-        return {
-            'cbc:ID': {'_text': grouping_key['tax_category_code']},
-            'cbc:Percent': {'_text': grouping_key['amount']},
-            'cbc:TaxExemptionReasonCode': {'_text': grouping_key.get('tax_exemption_reason_code')},
-            'cbc:TaxExemptionReason': {'_text': grouping_key.get('tax_exemption_reason')},
-            'cac:TaxScheme': {
-                'cbc:ID': {'_text': 'VAT'}
-            }
-        }
-
-    # -------------------------------------------------------------------------
-    # EXPORT: Templates for document level allowance/charge nodes
-    # -------------------------------------------------------------------------
-
-    def _get_document_allowance_charge_node(self, vals):
-        allowance_charge_node = super()._get_document_allowance_charge_node(vals)
-        allowance_charge_node['cbc:MultiplierFactorNumeric'] = None
-        return allowance_charge_node
-
-    # -------------------------------------------------------------------------
-    # EXPORT: Templates for line nodes
-    # -------------------------------------------------------------------------
-
-    def _add_document_line_amount_nodes(self, line_node, vals):
-        super()._add_document_line_amount_nodes(line_node, vals)
-        # We can't have negative unit prices, so we invert the signs of
-        # the unit price and quantity, resulting in the same amount in the end
-        quantity_tag = self._get_tags_for_document_type(vals)['line_quantity']
-        if vals['base_line']['price_unit'] < 0.0:
-            line_node[quantity_tag]['_text'] = -vals['base_line']['quantity']
-
-    def _add_document_line_tax_total_nodes(self, line_node, vals):
-        # TaxTotal should not be used in BIS 3.0
-        pass
-
-    def _add_document_line_tax_category_nodes(self, line_node, vals):
-        base_line = vals['base_line']
-        aggregated_tax_details = self.env['account.tax']._aggregate_base_line_tax_details(base_line, vals['tax_grouping_function'])
-
-        line_node['cac:Item']['cac:ClassifiedTaxCategory'] = [
-            # [UBL-CR-600] A UBL invoice should not include the InvoiceLine Item ClassifiedTaxCategory TaxExemptionReasonCode
-            # [UBL-CR-601] TaxExemptionReason must not appear in InvoiceLine Item ClassifiedTaxCategory
-            # [BR-E-10] TaxExemptionReason must only appear in TaxTotal TaxSubtotal TaxCategory
-            self._get_tax_category_node({
-                **vals,
-                'grouping_key': {
-                    **grouping_key,
-                    'tax_exemption_reason_code': None,
-                    'tax_exemption_reason': None,
-                }
-            })
-            for grouping_key in aggregated_tax_details
-            if grouping_key
-        ]
-
-    def _add_document_line_price_nodes(self, line_node, vals):
-        super()._add_document_line_price_nodes(line_node, vals)
-        currency_suffix = vals['currency_suffix']
-        sign = 1 if vals['base_line']['price_unit'] >= 0.0 else -1
-        line_node['cac:Price']['cbc:PriceAmount']['_text'] = FloatFmt(sign * vals[f'gross_price_unit{currency_suffix}'], 1, 8)
-
-    # -------------------------------------------------------------------------
     # EXPORT: Constraints for new helpers
     # -------------------------------------------------------------------------
 
@@ -793,13 +768,13 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         line_nodes = vals['document_node'][line_tag]
 
         for line_node in line_nodes:
-            if not line_node['cac:Item']['cbc:Name']['_text']:
+            if not (line_node['cac:Item']['cbc:Name'] or {}).get('_text'):
                 # [BR-25]-Each Invoice line (BG-25) shall contain the Item name (BT-153).
                 constraints.update({'cen_en16931_item_name': _("Each invoice line should have a product or a label.")})
                 break
 
         for line in invoice.invoice_line_ids.filtered(lambda x: x.display_type not in ('line_note', 'line_section')):
-            if len(line.tax_ids.flatten_taxes_hierarchy().filtered(lambda t: t.amount_type != 'fixed')) != 1:
+            if len(line.tax_ids.flatten_taxes_hierarchy().filtered(lambda t: t.amount_type not in ('fixed', 'code'))) != 1:
                 # [UBL-SR-48]-Invoice lines shall have one and only one classified tax category.
                 # /!\ exception: possible to have any number of ecotaxes (fixed tax) with a regular percentage tax
                 constraints.update({'cen_en16931_tax_line': _("Each invoice line shall have one and only one tax.")})
@@ -905,3 +880,242 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                 ) if not mva.is_valid(vat) or len(vat) != 14 or vat[:2] != 'NO' or vat[-3:] != 'MVA' else "",
             })
         return constraints
+
+    # -------------------------------------------------------------------------
+    # EXPORT: Gathering data
+    # -------------------------------------------------------------------------
+
+    def _ubl_default_tax_subtotal_tax_category_grouping_key(self, tax_grouping_key, vals):
+        # EXTENDS
+        return {
+            **super()._ubl_default_tax_subtotal_tax_category_grouping_key(tax_grouping_key, vals),
+            # Temporary solution to have withholding taxes merged with others until we know how to manage them.
+            'is_withholding': False,
+        }
+
+    def _setup_base_lines(self, vals):
+        # OVERRIDE
+        AccountTax = self.env['account.tax']
+        company = vals['company']
+
+        # Avoid negative unit price.
+        for base_line in vals['base_lines']:
+            if base_line['price_unit'] < 0.0:
+                base_line['quantity'] *= -1
+                base_line['price_unit'] *= -1
+
+        # Manage taxes for emptying.
+        vals['base_lines'] = self._ubl_turn_emptying_taxes_as_new_base_lines(vals['base_lines'], company, vals)
+
+        vals['_ubl_values'] = {}
+        for base_line in vals['base_lines']:
+            base_line['_ubl_values'] = {}
+
+        # Global rounding of tax_details using 6 digits.
+        AccountTax._round_raw_total_excluded(vals['base_lines'], company)
+        AccountTax._round_raw_total_excluded(vals['base_lines'], company, in_foreign_currency=False)
+        AccountTax._add_and_round_raw_gross_total_excluded_and_discount(vals['base_lines'], company)
+        AccountTax._add_and_round_raw_gross_total_excluded_and_discount(vals['base_lines'], company, in_foreign_currency=False)
+
+        # Turn recycling contribution taxes such as RECUPEL / AUVIBEL into allowance/charges.
+        self._ubl_add_base_line_ubl_values_allowance_charges_recycling_contribution(vals)
+
+        # Turn belgium excises taxes into allowance/charges.
+        self._ubl_add_base_line_ubl_values_allowance_charges_excise(vals)
+
+        # Turn 'discount' field into allowance/charges.
+        self._ubl_add_base_line_ubl_values_allowance_charges_discount(vals)
+
+        # Add 'line_extension_amount' being the total without tax.
+        self._ubl_add_base_line_ubl_values_line_extension_amount(vals)
+
+        # Add 'price_amount' being the original price unit without tax.
+        self._ubl_add_base_line_ubl_values_price(vals)
+
+        # Add 'item' being information about item taxes.
+        self._ubl_add_base_line_ubl_values_item(vals)
+
+        # Add 'tax_currency_code'.
+        self._ubl_add_values_tax_currency_code(vals)
+
+        # Add 'tax_totals'.
+        self._ubl_add_values_tax_totals(vals)
+
+        # Add 'payable_rounding_amount' to manage cash rounding.
+        self._ubl_add_values_payable_rounding_amount(vals)
+
+        # Extract cash rounding lines.
+        vals['base_lines'] = [
+            base_line
+            for base_line in vals['base_lines']
+            if base_line not in vals['_ubl_values']['payable_rounding_base_lines']
+        ]
+
+        # Add 'allowance_charge_early_payment' to manage the early payment discount.
+        self._ubl_add_values_allowance_charge_early_payment(vals)
+
+    def _add_invoice_line_vals(self, vals):
+        # OVERRIDE
+        # Those temporary values are wrongly computed and the similar data are added to the base lines in
+        # 'setup_base_lines' because we need to compute them on all lines at once instead of on each line
+        # separately.
+        pass
+
+    # -------------------------------------------------------------------------
+    # EXPORT: Build Nodes
+    # -------------------------------------------------------------------------
+
+    def _add_invoice_line_amount_nodes(self, line_node, vals):
+        # OVERRIDE
+        base_line = vals['base_line']
+        currency = vals['currency_id']
+
+        quantity_tag = self._get_tags_for_document_type(vals)['line_quantity']
+
+        line_node.update({
+            quantity_tag: {
+                '_text': base_line['quantity'],
+                'unitCode': self._get_uom_unece_code(base_line['product_uom_id']),
+            },
+            'cbc:LineExtensionAmount': {
+                '_text': FloatFmt(base_line['_ubl_values']['line_extension_amount'], min_dp=currency.decimal_places),
+                'currencyID': currency.name,
+            },
+        })
+
+    def _add_invoice_line_allowance_charge_nodes(self, line_node, vals):
+        # OVERRIDE
+        base_line = vals['base_line']
+        ubl_values = base_line['_ubl_values']
+        allowance_charges_nodes = line_node['cac:AllowanceCharge'] = []
+
+        # Discount.
+        discount_values = ubl_values['allowance_charge_discount_currency']
+        if discount_values:
+            allowance_charges_nodes.append(self._ubl_get_line_allowance_charge_discount_node(vals, discount_values))
+
+        # Recycling contribution taxes.
+        for recycling_contribution_values in base_line['_ubl_values']['allowance_charges_recycling_contribution_currency']:
+            allowance_charges_nodes.append(self._ubl_get_line_allowance_charge_recycling_contribution_node(vals, recycling_contribution_values))
+
+        # Excise taxes.
+        for excise_values in base_line['_ubl_values']['allowance_charges_excise_currency']:
+            allowance_charges_nodes.append(self._ubl_get_line_allowance_charge_excise_node(vals, excise_values))
+
+    def _add_invoice_line_item_nodes(self, line_node, vals):
+        # OVERRIDE
+        item_values = vals['base_line']['_ubl_values']['item_currency']
+        line_node['cac:Item'] = self._ubl_get_line_item_node(vals, item_values)
+
+    def _add_invoice_line_tax_category_nodes(self, line_node, vals):
+        # OVERRIDE
+        pass
+
+    def _add_invoice_line_tax_total_nodes(self, line_node, vals):
+        # OVERRIDE
+        pass
+
+    def _add_invoice_line_price_nodes(self, line_node, vals):
+        # OVERRIDE
+        base_line = vals['base_line']
+        ubl_values = base_line['_ubl_values']
+
+        line_node['cac:Price'] = {
+            'cbc:PriceAmount': {
+                '_text': FloatFmt(ubl_values['price_amount_currency'], min_dp=1, max_dp=6),
+                'currencyID': vals['currency_name'],
+            },
+        }
+
+    def _add_invoice_allowance_charge_nodes(self, document_node, vals):
+        # OVERRIDE
+        ubl_values = vals['_ubl_values']
+        document_node['cac:AllowanceCharge'] = [
+            self._ubl_get_allowance_charge_early_payment(vals, early_payment_values)
+            for early_payment_values in ubl_values['allowance_charges_early_payment_currency']
+        ]
+
+    def _add_invoice_tax_total_nodes(self, document_node, vals):
+        # OVERRIDE
+        ubl_values = vals['_ubl_values']
+        company = vals['company']
+        company_currency = company.currency_id
+        currency = vals['currency_id']
+
+        tax_total_nodes = document_node['cac:TaxTotal'] = []
+        for tax_total in ubl_values['tax_totals_currency'].values():
+            tax_total_node = self._ubl_get_tax_total_node(vals, tax_total)
+            tax_total_nodes.append(tax_total_node)
+
+        # Only one subtotal expressed in foreign currency in case of multi currencies.
+        if currency != company_currency:
+            for tax_total in ubl_values['tax_totals'].values():
+                tax_total_node = self._ubl_get_tax_total_node(vals, tax_total)
+                tax_total_node['cac:TaxSubtotal'] = []
+                tax_total_nodes.append(tax_total_node)
+
+    def _add_invoice_monetary_total_vals(self, vals):
+        # OVERRIDE
+        pass
+
+    def _add_invoice_monetary_total_nodes(self, document_node, vals):
+        monetary_total_tag = self._get_tags_for_document_type(vals)['monetary_total']
+        ubl_values = vals['_ubl_values']
+        invoice = vals['invoice']
+        line_tag = self._get_tags_for_document_type(vals)['document_line']
+
+        line_extension_amount = sum(
+            line_node['cbc:LineExtensionAmount']['_text']
+            for line_node in document_node[line_tag]
+        )
+        tax_amount = sum(
+            tax_total['cbc:TaxAmount']['_text']
+            for tax_total in document_node['cac:TaxTotal']
+            if tax_total['cbc:TaxAmount']['currencyID'] == vals['currency_id'].name
+        )
+        total_allowance = sum(
+            allowance_charge['cbc:Amount']['_text']
+            for allowance_charge in document_node['cac:AllowanceCharge']
+            if allowance_charge['cbc:ChargeIndicator']['_text'] == 'false'
+        )
+        total_charge = sum(
+            allowance_charge['cbc:Amount']['_text']
+            for allowance_charge in document_node['cac:AllowanceCharge']
+            if allowance_charge['cbc:ChargeIndicator']['_text'] == 'true'
+        )
+        payable_rounding_amount = ubl_values['payable_rounding_amount_currency']
+
+        document_node[monetary_total_tag] = {
+            'cbc:LineExtensionAmount': {
+                '_text': FloatFmt(line_extension_amount, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            },
+            'cbc:TaxExclusiveAmount': {
+                '_text': FloatFmt(line_extension_amount, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            },
+            'cbc:TaxInclusiveAmount': {
+                '_text': FloatFmt(line_extension_amount + tax_amount, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            },
+            'cbc:AllowanceTotalAmount': {
+                '_text': FloatFmt(total_allowance, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            } if total_allowance else None,
+            'cbc:ChargeTotalAmount': {
+                '_text': FloatFmt(total_charge, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            } if total_charge else None,
+            'cbc:PrepaidAmount': {
+                '_text': FloatFmt(invoice.amount_total - invoice.amount_residual, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            },
+            'cbc:PayableRoundingAmount': {
+                '_text': FloatFmt(payable_rounding_amount, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            } if payable_rounding_amount else None,
+            'cbc:PayableAmount': {
+                '_text': FloatFmt(invoice.amount_residual, min_dp=vals['currency_dp']),
+                'currencyID': vals['currency_name'],
+            },
+        }

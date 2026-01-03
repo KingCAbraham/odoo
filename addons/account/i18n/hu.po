@@ -31,9 +31,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 18:37+0000\n"
-"PO-Revision-Date: 2025-08-22 22:21+0000\n"
-"Last-Translator: Tamás Dombos <tdombos@gmail.com>\n"
+"POT-Creation-Date: 2025-12-12 18:36+0000\n"
+"PO-Revision-Date: 2025-12-19 06:52+0000\n"
+"Last-Translator: Krisztián Juhász <juhasz.krisztian@uzletimegoldasok.hu>\n"
 "Language-Team: Hungarian <https://translate.odoo.com/projects/odoo-18/"
 "account/hu/>\n"
 "Language: hu\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_journal__type
@@ -220,15 +220,6 @@ msgstr "%(ref)s (%(currency_amount)s)"
 #: code:addons/account/models/account_account_tag.py:0
 msgid "%(tag)s (%(country_code)s)"
 msgstr "%(tag)s (%(country_code)s)"
-
-#. module: account
-#. odoo-python
-#: code:addons/account/models/account_tax.py:0
-msgid ""
-"%(tax_account)s (%(account_name)s) should be an account of type \"%"
-"(receivable)s\" or \"%(payable)s\" with both options \"%"
-"(allow_reconciliation)s\" and \"%(non_trade)s\" enabled."
-msgstr ""
 
 #. module: account
 #. odoo-python
@@ -1497,7 +1488,7 @@ msgstr "<strong class=\"mr16\">Részösszeg</strong>"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "<strong>Credit Note Date</strong>"
-msgstr "<strong>Jóváírás Értesítés Dátum</strong>"
+msgstr "<strong>Jóváírás dátuma</strong>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
@@ -1512,7 +1503,7 @@ msgstr "<strong>Dátum</strong>"
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "<strong>Delivery Date</strong>"
-msgstr "<strong>Szállítási Dátum</strong>"
+msgstr "<strong>Teljesítési Dátum</strong>"
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.bill_preview
@@ -1932,6 +1923,14 @@ msgstr "Számla Készpénz Kerekítés"
 #: model:ir.model,name:account.model_account_chart_template
 msgid "Account Chart Template"
 msgstr "Számlatükör sablon"
+
+#. module: account
+#. odoo-python
+#: code:addons/account/models/account_code_mapping.py:0
+msgid ""
+"Account Code Mapping cannot be accessed directly. It is designed to be used "
+"only through the Chart of Accounts."
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_report_line__account_codes_formula
@@ -3379,6 +3378,11 @@ msgstr "Mellékletek száma"
 #: model:ir.model.fields,field_description:account.field_account_payment__attachment_ids
 msgid "Attachments"
 msgstr "Mellékletek"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__attachments_not_supported
+msgid "Attachments Not Supported"
+msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_mail_mail__account_audit_log_activated
@@ -6556,6 +6560,11 @@ msgid "Display Amount"
 msgstr "Megjelenítendő összeg"
 
 #. module: account
+#: model:ir.model.fields,field_description:account.field_account_move_send_wizard__display_attachments_widget
+msgid "Display Attachments Widget"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_payment_term_line__display_days_next_month
 msgid "Display Days Next Month"
 msgstr "Következő hónap napjainak megjelenítése"
@@ -8299,6 +8308,11 @@ msgstr ""
 "Hogyan számítják ki a teljes adóösszeget a megrendelésekben és számlákban"
 
 #. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "ICE:"
+msgstr ""
+
+#. module: account
 #: model:ir.model.fields,field_description:account.field_account_account__id
 #: model:ir.model.fields,field_description:account.field_account_account_tag__id
 #: model:ir.model.fields,field_description:account.field_account_accrued_orders_wizard__id
@@ -9167,11 +9181,6 @@ msgstr "Számla online fizetés"
 #: model:ir.model.fields,field_description:account.field_account_move__invoice_outstanding_credits_debits_widget
 msgid "Invoice Outstanding Credits Debits Widget"
 msgstr "Számla Kintlévőségek Hitelek Terhelések Widget"
-
-#. module: account
-#: model:ir.actions.report,name:account.account_invoices
-msgid "Invoice PDF"
-msgstr "Számla PDF"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_line__invoice_partner_display_name
@@ -11852,6 +11861,7 @@ msgstr "PAY001"
 #. module: account
 #. odoo-python
 #: code:addons/account/models/account_move.py:0
+#: model:ir.actions.report,name:account.account_invoices
 msgid "PDF"
 msgstr "PDF"
 
@@ -13483,7 +13493,7 @@ msgstr "Reverzálása"
 #. odoo-python
 #: code:addons/account/wizard/account_move_reversal.py:0
 msgid "Reversal of: %(move_name)s, %(reason)s"
-msgstr ""
+msgstr "Jóváírva: %(move_name)s, %(reason)s"
 
 #. module: account
 #. odoo-python
@@ -16936,8 +16946,8 @@ msgstr ""
 
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "This setting cannot be changed after an invoice is created."
-msgstr "Ez a beállítás nem módosítható, miután egy számla létrejött."
+msgid "This setting locks once a journal entry is created."
+msgstr ""
 
 #. module: account
 #. odoo-python
@@ -19544,7 +19554,7 @@ msgstr ""
 #. module: account
 #: model_terms:ir.ui.view,arch_db:account.report_invoice_document
 msgid "units"
-msgstr "egységek"
+msgstr "db"
 
 #. module: account
 #. odoo-javascript
@@ -19618,6 +19628,12 @@ msgid ""
 msgstr ""
 "{{ object.company_id.name }} Fizetési bizonylat (Hivatkozás {{ object.name "
 "or 'n/a' }})"
+
+#~ msgid "Invoice PDF"
+#~ msgstr "Számla PDF"
+
+#~ msgid "This setting cannot be changed after an invoice is created."
+#~ msgstr "Ez a beállítás nem módosítható, miután egy számla létrejött."
 
 #~ msgid ""
 #~ "Accrual entry created on %(date)s: %(accrual_entry)s.                    "

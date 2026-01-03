@@ -428,12 +428,25 @@ export class PosStore extends Reactive {
                 return false;
             }
         }
+        const refundedOrderLines = order.lines
+            .filter((line) => line.refunded_orderline_id?.order_id)
+            .map((line) => ({
+                order: line.refunded_orderline_id.order_id,
+                uuid: line.refunded_orderline_id.uuid,
+            }));
+
         const orderIsDeleted = await this.deleteOrders([order]);
-        if (orderIsDeleted) {
-            order.uiState.displayed = false;
-            this.afterOrderDeletion();
+        if (!orderIsDeleted) {
+            return false;
         }
-        return orderIsDeleted;
+        order.uiState.displayed = false;
+        // Delete refunded lines linked to the current order
+        for (const refundedLine of refundedOrderLines) {
+            delete refundedLine.order?.uiState?.lineToRefund[refundedLine.uuid];
+        }
+
+        this.afterOrderDeletion();
+        return true;
     }
     afterOrderDeletion() {
         this.set_order(this.get_open_orders().at(-1) || this.createNewOrder());
@@ -790,7 +803,7 @@ export class PosStore extends Reactive {
                     ]),
                     combo_item_id: comboItem.combo_item_id,
                     price_unit: comboItem.price_unit,
-                    price_type: "automatic",
+                    price_type: "original",
                     order_id: order,
                     qty: 1,
                     attribute_value_ids: comboItem.attribute_value_ids?.map((attr) => [
@@ -1186,7 +1199,7 @@ export class PosStore extends Reactive {
 
     // There for override
     async preSyncAllOrders(orders) {}
-    postSyncAllOrders(orders) {}
+    async postSyncAllOrders(orders) {}
     async syncAllOrders(options = {}) {
         const { orderToCreate, orderToUpdate } = this.getPendingOrder();
         let orders = options.orders || [...orderToCreate, ...orderToUpdate];
@@ -1244,7 +1257,7 @@ export class PosStore extends Reactive {
                     }
                 }
 
-                this.postSyncAllOrders(newData["pos.order"]);
+                await this.postSyncAllOrders(newData["pos.order"]);
                 this.removePendingOrder(order);
                 syncedOrders.push(...newData["pos.order"]);
                 order.clearCommands();
@@ -1930,6 +1943,9 @@ export class PosStore extends Reactive {
         return {
             resModel: "pos.order",
             resId: order.id,
+            context: {
+                from_frontend: true,
+            },
             onRecordSaved: async (record) => {
                 await this.data.read("pos.order", [record.evalContext.id]);
                 await this.data.read(

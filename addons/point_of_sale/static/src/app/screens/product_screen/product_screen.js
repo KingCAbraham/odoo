@@ -145,7 +145,9 @@ export class ProductScreen extends Component {
                     ? `/web/image?model=pos.category&field=image_128&id=${category.id}`
                     : undefined,
             isSelected: this.getAncestorsAndCurrent().includes(category),
-            isChildren: this.getChildCategories(this.pos.selectedCategory).includes(category),
+            isChildren: this.pos.selectedCategory
+                ? this.pos.selectedCategory.child_ids.includes(category)
+                : !category.parent_id,
         };
     }
 
@@ -299,6 +301,10 @@ export class ProductScreen extends Component {
             product.uom_id.id == qty.rule.associated_uom_id[0]
         ) {
             vals.qty = qty.value;
+        }
+        const packaging = this.pos.models["product.packaging"].getAllBy("barcode");
+        if (packaging[productBarcode.code]) {
+            vals.qty = (vals.qty || 1) * packaging[productBarcode.code].qty;
         }
 
         await this.pos.addLineToCurrentOrder(vals, { code: lotBarcode });

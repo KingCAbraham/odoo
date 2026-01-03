@@ -8,12 +8,13 @@
 # Nurlan Farajov <coolinuxoid@gmail.com>, 2025
 # erpgo translator <jumshud@erpgo.az>, 2025
 # ERPGo Odoo <erpgo.odoo@gmail.com>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-24 18:36+0000\n"
-"PO-Revision-Date: 2025-11-07 15:25+0000\n"
+"POT-Creation-Date: 2025-12-05 18:36+0000\n"
+"PO-Revision-Date: 2025-12-16 15:48+0000\n"
 "Last-Translator: ERPGo Odoo <erpgo.odoo@gmail.com>\n"
 "Language-Team: Azerbaijani <https://translate.odoo.com/projects/odoo-18/"
 "website/az/>\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: website
 #. odoo-javascript
@@ -1640,6 +1641,8 @@ msgid ""
 "<span class=\"o_footer_copyright_name me-2\">Copyright &amp;copy; Company "
 "name</span>"
 msgstr ""
+"<span class=\"o_footer_copyright_name me-2\">Müəllif hüququ &amp;copy; "
+"Şirkət adı</span>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.header_text_element
@@ -3660,7 +3663,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_view
 #: model_terms:ir.ui.view,arch_db:website.snippets
 msgid "Card"
-msgstr ""
+msgstr "Kart"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippets
@@ -4477,7 +4480,7 @@ msgstr ""
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
 msgid "Copyright"
-msgstr ""
+msgstr "Müəllif hüququ"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_features_grid
@@ -4880,7 +4883,7 @@ msgstr "Tarix &amp; Vaxt"
 #: code:addons/website/static/src/snippets/s_countdown/000.js:0
 #: model_terms:ir.ui.view,arch_db:website.s_countdown
 msgid "Days"
-msgstr "günlər"
+msgstr "Gün"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippets
@@ -5146,7 +5149,7 @@ msgstr ""
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.website_visitor_view_form
 msgid "Details"
-msgstr "Ətraflı Məlumat"
+msgstr "Təfərrüatlar"
 
 #. module: website
 #. odoo-javascript
@@ -5754,7 +5757,7 @@ msgstr ""
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.publish_management
 msgid "Edit in backend"
-msgstr "Çıxış buferində redaktə edin"
+msgstr "Backend'də redaktə edin"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
@@ -6808,7 +6811,7 @@ msgstr "Tam Ekran"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_tabs_options
 msgid "Full Width"
-msgstr ""
+msgstr "Tam eni"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -9464,7 +9467,7 @@ msgstr ""
 #: code:addons/website/static/src/snippets/s_countdown/000.js:0
 #: model_terms:ir.ui.view,arch_db:website.s_countdown
 msgid "Minutes"
-msgstr "Dəqiqələr"
+msgstr "Dəqiqə"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -10032,7 +10035,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website.s_countdown_options
 #: model_terms:ir.ui.view,arch_db:website.s_website_form_options
 msgid "Nothing"
-msgstr ""
+msgstr "Heç biri"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_website_form_options
@@ -10976,7 +10979,7 @@ msgstr "Pinterest"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_website_form_options
 msgid "Placeholder"
-msgstr "Yertutucu"
+msgstr "Nümunə mətn"
 
 #. module: website
 #. odoo-javascript
@@ -14053,7 +14056,7 @@ msgstr "Tony Fred, Baş direktor"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_chart_options
 msgid "Tooltip"
-msgstr ""
+msgstr "Çıxan izah"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_card_options
@@ -14229,7 +14232,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website.s_website_form_options
 #: model_terms:ir.ui.view,arch_db:website.website_page_properties_view_form
 msgid "Type"
-msgstr "Tip"
+msgstr "Növ"
 
 #. module: website
 #. odoo-javascript

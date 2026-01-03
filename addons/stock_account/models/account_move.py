@@ -57,7 +57,8 @@ class AccountMove(models.Model):
         res = super(AccountMove, self).button_draft()
 
         # Unlink the COGS lines generated during the 'post' method.
-        self.mapped('line_ids').filtered(lambda line: line.display_type == 'cogs').unlink()
+        with self.env.protecting(self.env['account.move']._get_protected_vals({}, self)):
+            self.mapped('line_ids').filtered(lambda line: line.display_type == 'cogs').unlink()
         return res
 
     def button_cancel(self):
@@ -136,7 +137,7 @@ class AccountMove(models.Model):
 
                 # Add interim account line.
                 lines_vals_list.append({
-                    'name': line.name[:64],
+                    'name': line.name[:64] if line.name else '',
                     'move_id': move.id,
                     'partner_id': move.commercial_partner_id.id,
                     'product_id': line.product_id.id,
@@ -152,7 +153,7 @@ class AccountMove(models.Model):
 
                 # Add expense account line.
                 lines_vals_list.append({
-                    'name': line.name[:64],
+                    'name': line.name[:64] if line.name else '',
                     'move_id': move.id,
                     'partner_id': move.commercial_partner_id.id,
                     'product_id': line.product_id.id,

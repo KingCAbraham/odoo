@@ -12,6 +12,7 @@ import {
 import { fillEmpty, unwrapContents } from "@html_editor/utils/dom";
 import {
     isEmptyBlock,
+    isEmptyTextNode,
     isRedundantElement,
     isTextNode,
     isWhitespace,
@@ -335,6 +336,18 @@ export class ColorPlugin extends Plugin {
                             selectedChildren,
                             splitnode
                         );
+                        // After splitting we need to clear the new nodes created by
+                        // `splitElement` that contains only empty text nodes.
+                        // We also need to update the outer cursor.
+                        for (const child of font.parentElement.children) {
+                            if (
+                                child.childNodes.length &&
+                                [...child.childNodes].every((node) => isEmptyTextNode(node))
+                            ) {
+                                cursors.update(callbacksForCursorUpdate.remove(child));
+                                child.remove();
+                            }
+                        }
                         if (isGradientBeingUpdated) {
                             const classRegex =
                                 mode === "color" ? TEXT_CLASSES_REGEX : BG_CLASSES_REGEX;

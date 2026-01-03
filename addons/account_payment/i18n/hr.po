@@ -12,13 +12,15 @@
 # Bole <bole@dajmi5.com>, 2024
 # Luka Carević <luka@uvid.hr>, 2025
 # Karlo Mikešić <karlo@uvid.hr>, 2025.
+# Weblate <noreply-mt-weblate@weblate.org>, 2025.
+# Ana Matulin <ana@uvid.hr>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-16 18:38+0000\n"
-"PO-Revision-Date: 2025-09-04 16:45+0000\n"
-"Last-Translator: Karlo Mikešić <karlo@uvid.hr>\n"
+"PO-Revision-Date: 2025-12-02 08:22+0000\n"
+"Last-Translator: Ana Matulin <ana@uvid.hr>\n"
 "Language-Team: Croatian <https://translate.odoo.com/projects/odoo-18/"
 "account_payment/hr/>\n"
 "Language: hr\n"
@@ -27,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: account_payment
 #. odoo-python
@@ -518,7 +520,7 @@ msgstr "Plaćanja"
 #. odoo-python
 #: code:addons/account_payment/controllers/payment.py:0
 msgid "Please log in to pay your overdue invoices"
-msgstr ""
+msgstr "Molimo prijavite se kako biste platili dospjele račune"
 
 #. module: account_payment
 #. odoo-python
@@ -584,7 +586,7 @@ msgstr ""
 #. module: account_payment
 #: model:ir.model.fields,field_description:account_payment.field_account_payment_method_line__payment_provider_state
 msgid "State"
-msgstr "Županija/savezna država"
+msgstr "Status"
 
 #. module: account_payment
 #: model:onboarding.onboarding.step,done_text:account_payment.onboarding_onboarding_step_payment_provider
@@ -765,7 +767,7 @@ msgstr ""
 #. module: account_payment
 #: model_terms:ir.ui.view,arch_db:account_payment.portal_my_invoices_payment
 msgid "overdue"
-msgstr ""
+msgstr "dospjelo"
 
 #~ msgid "Code"
 #~ msgstr "Šifra"
