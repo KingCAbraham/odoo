@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <!-- Acción para listar documentos -->
+    <record id="action_ai_chatbot_modern_documents" model="ir.actions.act_window">
+      <field name="name">Documentos RAG</field>
+      <field name="res_model">ai_chatbot_modern.document</field>
+      <field name="view_mode">list,form</field>
+      <field name="help" type="html">
+        <p>Desde aquí puedes cargar archivos TXT o PDF y procesarlos para que el chatbot los utilice como contexto.</p>
+      </field>
+    </record>
+
+    <!-- (Opcional) Acción para abrir ajustes -->
+    <record id="action_ai_chatbot_modern_settings" model="ir.actions.act_window">
+      <field name="name">Ajustes Chatbot</field>
+      <field name="res_model">res.config.settings</field>
+      <field name="view_mode">form</field>
+      <field name="target">inline</field>
+    </record>
+
+    <!-- Menús -->
+    <menuitem id="menu_ai_chatbot_modern_root"
+              name="AI Chatbot"
+              sequence="1000"/>
+
+    <menuitem id="menu_ai_chatbot_modern_documents"
+              name="Documentos"
+              parent="menu_ai_chatbot_modern_root"
+              action="action_ai_chatbot_modern_documents"
+              sequence="10"/>
+
+    <menuitem id="menu_ai_chatbot_modern_settings"
+              name="Ajustes"
+              parent="menu_ai_chatbot_modern_root"
+              action="action_ai_chatbot_modern_settings"
+              sequence="30"/>
+
+  </data>
+</odoo>

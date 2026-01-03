@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 import base64
 import re
 from odoo import fields, models
 from odoo.exceptions import UserError
 
-
 def _chunk_text(text: str, chunk_size=900, overlap=120):
+    """
+    Divide el texto en fragmentos (chunks) de tamaño fijo con solapamiento.
+    """
     text = re.sub(r"\s+", " ", (text or "")).strip()
     if not text:
         return []
@@ -16,33 +17,39 @@ def _chunk_text(text: str, chunk_size=900, overlap=120):
         i += max(1, chunk_size - overlap)
     return chunks
 
-
 class ChatbotDocument(models.Model):
-    _name = "odoo_ai_chatbot.document"
+    _name = "ai_chatbot_modern.document"
     _description = "Documento para RAG"
     _rec_name = "name"
 
     name = fields.Char(required=True)
     active = fields.Boolean(default=True)
-
     file = fields.Binary(string="Archivo", attachment=True, required=True)
     filename = fields.Char(string="Nombre de archivo")
+    chunk_ids = fields.One2many("ai_chatbot_modern.document.chunk",
+                                "document_id",
+                                string="Chunks")
+    def toggle_active(self):
+        for rec in self:
+            rec.active = not rec.active
 
-    chunk_ids = fields.One2many("odoo_ai_chatbot.document.chunk", "document_id", string="Chunks")
 
     def action_index(self):
+        """
+        Extrae texto, genera chunks y crea embeddings para todos los chunks.
+        """
         self.ensure_one()
-
         text = self._extract_text()
         chunks = _chunk_text(text)
-
         if not chunks:
-            raise UserError("No pude extraer texto. Sube TXT o PDF con texto seleccionable.")
+            raise UserError(
+                "No se pudo extraer texto. Sube un archivo TXT o PDF con texto seleccionable.")
 
-        # limpiar chunks previos
+        # Elimina chunks previos
         self.chunk_ids.unlink()
 
-        Chunk = self.env["odoo_ai_chatbot.document.chunk"]
+        # Crea nuevos chunks
+        Chunk = self.env["ai_chatbot_modern.document.chunk"].sudo()
         for idx, ch in enumerate(chunks, start=1):
             Chunk.create({
                 "document_id": self.id,
@@ -50,47 +57,48 @@ class ChatbotDocument(models.Model):
                 "content": ch,
             })
 
-        # crear embeddings (OpenAI remoto o Groq local, según provider)
-        self.env["odoo_ai_chatbot.rag"]._embed_all_chunks(self.id)
+        # Genera embeddings (según proveedor)
+        self.env["ai_chatbot_modern.rag"].sudo()._embed_all_chunks(self.id)
         return True
 
     def _extract_text(self):
+        """
+        Extrae texto de archivos TXT o PDF. Lanza UserError para formatos no soportados.
+        """
         self.ensure_one()
         raw = base64.b64decode(self.file or b"")
         name = (self.filename or "").lower().strip()
 
+        # TXT
         if name.endswith(".txt"):
             try:
                 return raw.decode("utf-8", errors="ignore")
             except Exception:
                 return raw.decode("latin-1", errors="ignore")
 
+        # PDF
         if name.endswith(".pdf"):
-            # Intento 1: pdfminer.six
             try:
-                from pdfminer.high_level import extract_text
-                import tempfile
-                with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as f:
-                    f.write(raw)
-                    f.flush()
-                    return extract_text(f.name) or ""
-            except ImportError:
-                raise UserError("Falta pdfminer.six. Instálalo: pip install pdfminer.six")
+                from pypdf import PdfReader
             except Exception:
-                # Si pdfminer falla (PDF raro), da error claro
-                raise UserError("No pude extraer texto del PDF. Asegúrate que el PDF tenga texto seleccionable (no solo imagen).")
+                raise UserError("Falta pypdf. Instala: pip install pypdf")
+
+            import io
+            reader = PdfReader(io.BytesIO(raw))
+            text_parts = []
+            for page in reader.pages:
+                text_parts.append(page.extract_text() or "")
+            return "\n".join(text_parts).strip()
+
 
         raise UserError("Formato no soportado. Usa TXT o PDF.")
 
-
 class ChatbotDocumentChunk(models.Model):
-    _name = "odoo_ai_chatbot.document.chunk"
-    _description = "Chunk de documento"
+    _name = "ai_chatbot_modern.document.chunk"
+    _description = "Fragmento de documento"
     _order = "sequence asc, id asc"
 
-    document_id = fields.Many2one("odoo_ai_chatbot.document", required=True, ondelete="cascade")
+    document_id = fields.Many2one("ai_chatbot_modern.document", required=True, ondelete="cascade")
     sequence = fields.Integer(default=1)
     content = fields.Text(required=True)
-
-    # Guarda lista de floats (embedding)
     embedding = fields.Json(string="Embedding")

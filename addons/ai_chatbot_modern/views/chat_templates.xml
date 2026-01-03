@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="ai_chatbot_modern_chat_templates" name="AI Chatbot Modern Chat Templates">
+    <t t-name="ai_chatbot_modern.ChatAction" owl="1">
+      <div class="o_ai_chatbot_modern p-3">
+
+        <div class="o_ai_chatbot_modern__messages mb-3" style="max-height:70vh; overflow:auto;">
+          <t t-foreach="state.messages" t-as="m" t-foreach-index="i" t-key="i">
+            <div t-attf-class="mb-2 d-flex #{m.role === 'user' ? 'justify-content-end' : 'justify-content-start'}">
+              <div t-attf-class="p-2 rounded-3 #{m.role === 'user' ? 'bg-primary text-white' : 'bg-light'}"
+                   style="max-width: 75%; white-space: pre-wrap;">
+                <t t-esc="m.content"/>
+              </div>
+            </div>
+          </t>
+        </div>
+
+        <div class="d-flex gap-2">
+          <textarea t-ref="inputRef"
+                    class="form-control"
+                    rows="2"
+                    placeholder="Escribe tu mensaje..."
+                    t-model="state.input"
+                    t-on-keydown="onKeydown"/>
+          <button class="btn btn-primary"
+                  t-att-disabled="state.loading"
+                  t-on-click="sendMessage">
+            <t t-if="state.loading">…</t>
+            <t t-else="">Enviar</t>
+          </button>
+        </div>
+
+      </div>
+    </t>
+  </template>
+</odoo>

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "category": "Tools",
     "summary": "Chatbot inteligente con documentos (PDF/TXT) usando RAG",
-    "depends": ["base", "web"],
+    "depends": ["base", "web", "base_setup"],
     "data": [
         "security/ir.model.access.csv",
         "views/documents_views.xml",
