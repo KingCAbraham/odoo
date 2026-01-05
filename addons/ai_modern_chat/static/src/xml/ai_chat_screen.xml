@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ai_modern_chat.ScreenTemplate" owl="1">
+        <div class="o_ai_chat_main">
+            <!-- Header -->
+            <div class="o_chat_header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-primary text-white rounded p-2 shadow-sm">
+                        <i class="fa fa-robot"/>
+                    </div>
+                    <div>
+                        <h4 class="m-0 fw-bold text-dark" style="font-size: 1.1rem;">Odoo Copilot</h4>
+                        <small class="text-success fw-bold" style="font-size: 0.75rem;">● Online</small>
+                    </div>
+                </div>
+                <span class="text-muted small">v1.0 • Carlos Chavez</span>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-grow-1 overflow-auto p-4" t-ref="scrollContainer">
+                <div class="o_chat_container">
+                    <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
+                        <div t-attf-class="d-flex w-100 {{ msg.role === 'user' ? 'justify-content-end' : 'justify-content-start' }}">
+                            
+                            <!-- Avatar System -->
+                            <t t-if="msg.role === 'system'">
+                                <div class="me-2 mt-1">
+                                    <div class="rounded-circle bg-white border d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;">
+                                        <i class="fa fa-robot text-primary small"/>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <div t-attf-class="o_chat_bubble {{ msg.role }}">
+                                <div style="white-space: pre-wrap;"><t t-esc="msg.content"/></div>
+                            </div>
+                        </div>
+                    </t>
+                    
+                    <t t-if="state.isLoading">
+                        <div class="d-flex align-items-center gap-2 text-muted ms-5 mb-3">
+                            <i class="fa fa-circle-o-notch fa-spin"/>
+                            <small class="fst-italic">Analizando datos...</small>
+                        </div>
+                    </t>
+                    
+                    <div t-ref="messagesEnd"/>
+                </div>
+            </div>
+
+            <!-- Input Footer -->
+            <div class="o_chat_input_container">
+                <div class="o_chat_container">
+                    <div class="o_chat_input_wrapper">
+                        <input type="text" 
+                               class="o_chat_input" 
+                               t-model="state.currentInput" 
+                               t-on-keydown="onKeydown"
+                               t-att-disabled="state.isLoading or state.isTyping"
+                               placeholder="Pregunta sobre ventas, clientes o inventario..."/>
+                        
+                        <button class="o_send_btn me-1" 
+                                t-on-click="sendMessage"
+                                t-att-disabled="!state.currentInput or state.isLoading or state.isTyping">
+                            <i class="fa fa-paper-plane"/>
+                        </button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <small class="text-muted" style="font-size: 0.7rem;">Powered by AI • Developed by Carlos Chavez</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

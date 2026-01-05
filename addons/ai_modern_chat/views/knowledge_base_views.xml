@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- VISTA FORMULARIO -->
+    <record id="view_ai_knowledge_form" model="ir.ui.view">
+        <field name="name">ai.knowledge.base.form</field>
+        <field name="model">ai.knowledge.base</field>
+        <field name="arch" type="xml">
+            <form string="Artículo de Conocimiento">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Ej: Tratamiento Capilar X"/></h1>
+                    </div>
+                    <group>
+                        <group string="Detalles de Uso">
+                            <field name="instructions" placeholder="Paso 1: Aplicar sobre cabello húmedo..."/>
+                            <field name="recommendations" placeholder="Usar dos veces por semana..."/>
+                        </group>
+                        <group string="Seguridad">
+                            <field name="precautions" placeholder="Evitar contacto con los ojos..."/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VISTA LISTA (Corrección: <list> en lugar de <tree>) -->
+    <record id="view_ai_knowledge_list" model="ir.ui.view">
+        <field name="name">ai.knowledge.base.list</field>
+        <field name="model">ai.knowledge.base</field>
+        <field name="arch" type="xml">
+            <list string="Base de Conocimiento IA">
+                <field name="name"/>
+                <field name="instructions" optional="show"/>
+                <field name="recommendations" optional="hide"/>
+                <field name="precautions" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ACCIÓN DE VENTANA (Corrección: view_mode='list,form') -->
+    <record id="action_ai_knowledge_base" model="ir.actions.act_window">
+        <field name="name">Base de Conocimiento IA</field>
+        <field name="res_model">ai.knowledge.base</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Crear primer registro de conocimiento
+          </p><p>
+            Aquí puedes definir instrucciones detalladas por producto.
+            Usa el botón "Importar" para subir tu Excel masivo.
+          </p>
+        </field>
+    </record>
+
+    <!-- MENÚ -->
+    <menuitem id="menu_ai_knowledge_base"
+              name="Base de Conocimiento"
+              parent="menu_ai_chat_root"
+              action="action_ai_knowledge_base"
+              sequence="20"/>
+</odoo>
